@@ -10,7 +10,10 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
 }
+apply plugin: 'java'
 apply plugin: 'eclipse'
+
+version = currentVersion
 
 repositories {
     // Use Maven Central for resolving dependencies.
