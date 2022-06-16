@@ -13,6 +13,7 @@ import org.apache.commons.compress.utils.FileNameUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.dbunit.dataset.AbstractTable;
 import org.dbunit.dataset.Column;
@@ -53,7 +54,8 @@ public class CsvTable extends AbstractTable {
      */
     public CsvTable(URL url, String tableName, Charset charset, CSVFormat csvFormat) {
         List<String> headerNameList;
-        try (InputStreamReader reader = new InputStreamReader(url.openStream(), charset);
+        try (BOMInputStream in = new BOMInputStream(url.openStream());
+                InputStreamReader reader = new InputStreamReader(in, charset);
                 CSVParser csvParser = csvFormat.builder().setHeader().setSkipHeaderRecord(true).build().parse(reader)) {
             headerNameList = csvParser.getHeaderNames();
             this.recordList = csvParser.getRecords();

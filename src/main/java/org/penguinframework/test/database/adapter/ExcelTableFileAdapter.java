@@ -10,15 +10,15 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.operation.DatabaseOperation;
 import org.penguinframework.test.dataset.excel.ExcelDataSet;
 
-public class ExcelFileAdapter extends FileAdapter {
+public class ExcelTableFileAdapter extends TableFileAdapter {
     private final Map<String, String> remapTableName;
 
-    public ExcelFileAdapter(Connection connection, Map<String, String> remapTableName) throws DatabaseUnitException {
+    public ExcelTableFileAdapter(Connection connection, Map<String, String> remapTableName) throws DatabaseUnitException {
         super(connection);
         this.remapTableName = remapTableName;
     }
 
-    public ExcelFileAdapter(Connection connection, String schema, Map<String, String> remapTableName)
+    public ExcelTableFileAdapter(Connection connection, String schema, Map<String, String> remapTableName)
             throws DatabaseUnitException {
         super(connection, schema);
         this.remapTableName = remapTableName;

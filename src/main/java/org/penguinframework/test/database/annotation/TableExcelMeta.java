@@ -1,6 +1,6 @@
 package org.penguinframework.test.database.annotation;
 
-public @interface ExcelMeta {
+public @interface TableExcelMeta {
     /**
      * Excelのシートとデータベースのテーブルの対応を指定。
      *

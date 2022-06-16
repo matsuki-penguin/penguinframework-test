@@ -12,26 +12,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.operation.DatabaseOperation;
 import org.junit.platform.commons.util.AnnotationUtils;
-import org.penguinframework.test.database.adapter.CsvFileAdapter;
-import org.penguinframework.test.database.adapter.ExcelFileAdapter;
-import org.penguinframework.test.database.adapter.FileAdapter;
+import org.penguinframework.test.database.adapter.CsvTableFileAdapter;
+import org.penguinframework.test.database.adapter.ExcelTableFileAdapter;
+import org.penguinframework.test.database.adapter.TableFileAdapter;
 import org.penguinframework.test.database.annotation.SheetMapping;
 import org.penguinframework.test.database.annotation.TableValueSource;
+import org.penguinframework.test.type.FileType;
 
 public class TableLoader {
-    private enum FileType {
-        EXCEL, CSV
-    }
-
-    private static final Map<String, FileType> FILE_TYPE_MAP = Map.of("xls", FileType.EXCEL, "xlsx", FileType.EXCEL,
-            "xlsm", FileType.EXCEL, "csv", FileType.CSV);
-
     private TableLoader() {
     }
 
@@ -59,71 +50,24 @@ public class TableLoader {
 
     private static void loadFromAnnotation(TableValueSource tableValueSource, Class<?> targetClass,
             Connection connection) throws DatabaseUnitException, SQLException, IOException {
-        DatabaseOperation databaseOperation = null;
-        switch (tableValueSource.operation()) {
-        case CLEAN_INSERT:
-            databaseOperation = DatabaseOperation.CLEAN_INSERT;
-            break;
-        case INSERT:
-            databaseOperation = DatabaseOperation.INSERT;
-            break;
-        }
-
-        CSVFormat csvFormat = null;
-        switch (tableValueSource.csvMeta().format()) {
-        case DEFAULT:
-            csvFormat = CSVFormat.DEFAULT;
-            break;
-        case EXCEL:
-            csvFormat = CSVFormat.EXCEL;
-            break;
-        case INFORMIX_UNLOAD:
-            csvFormat = CSVFormat.INFORMIX_UNLOAD;
-            break;
-        case INFORMIX_UNLOAD_CSV:
-            csvFormat = CSVFormat.INFORMIX_UNLOAD_CSV;
-            break;
-        case MONGODB_CSV:
-            csvFormat = CSVFormat.MONGODB_CSV;
-            break;
-        case MONGODB_TSV:
-            csvFormat = CSVFormat.MONGODB_TSV;
-            break;
-        case MYSQL:
-            csvFormat = CSVFormat.MYSQL;
-            break;
-        case ORACLE:
-            csvFormat = CSVFormat.ORACLE;
-            break;
-        case POSTGRESQL_CSV:
-            csvFormat = CSVFormat.POSTGRESQL_CSV;
-            break;
-        case POSTGRESQL_TEXT:
-            csvFormat = CSVFormat.POSTGRESQL_TEXT;
-            break;
-        case RFC4180, TDF:
-            csvFormat = CSVFormat.TDF;
-            break;
-        }
-
         // 読み込むファイルのURLオブジェクトを生成
         URL url = targetClass.getResource(StringUtils.firstNonEmpty(tableValueSource.value(), tableValueSource.path()));
 
-        FileType fileType = TableLoader.FILE_TYPE_MAP.get(FilenameUtils.getExtension(url.getFile()));
-        FileAdapter fileAdapter;
-        switch (fileType) {
+        TableFileAdapter fileAdapter;
+        switch (FileType.valueOf(url)) {
         case EXCEL:
             Map<String, String> remapTableName = Arrays.stream(tableValueSource.excelMeta().sheetMapping())
                     .collect(Collectors.toMap(SheetMapping::sheet, SheetMapping::table, (name1, name2) -> name1));
-            fileAdapter = new ExcelFileAdapter(connection, connection.getSchema(), remapTableName);
+            fileAdapter = new ExcelTableFileAdapter(connection, connection.getSchema(), remapTableName);
             break;
         case CSV:
-            fileAdapter = new CsvFileAdapter(connection, connection.getSchema(), tableValueSource.csvMeta().table(),
-                    Charset.forName(tableValueSource.csvMeta().fileEncoding()), csvFormat);
+            fileAdapter = new CsvTableFileAdapter(connection, connection.getSchema(), tableValueSource.csvMeta().table(),
+                    Charset.forName(tableValueSource.csvMeta().encoding()),
+                    tableValueSource.csvMeta().format().getCsvFormat());
             break;
         default:
             return;
         }
-        fileAdapter.load(databaseOperation, url);
+        fileAdapter.load(tableValueSource.operation().getDatabaseOperation(), url);
     }
 }

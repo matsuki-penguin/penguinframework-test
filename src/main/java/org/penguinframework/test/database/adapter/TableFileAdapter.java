@@ -9,15 +9,15 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.operation.DatabaseOperation;
 
-public abstract class FileAdapter {
+public abstract class TableFileAdapter {
     protected DatabaseConnection connection;
 
-    protected FileAdapter(Connection connection) throws DatabaseUnitException {
+    protected TableFileAdapter(Connection connection) throws DatabaseUnitException {
         super();
         this.connection = new DatabaseConnection(connection);
     }
 
-    protected FileAdapter(Connection connection, String schema) throws DatabaseUnitException {
+    protected TableFileAdapter(Connection connection, String schema) throws DatabaseUnitException {
         super();
         this.connection = new DatabaseConnection(connection, schema);
     }
