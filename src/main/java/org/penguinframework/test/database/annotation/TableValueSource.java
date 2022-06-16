@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.penguinframework.test.database.annotation.type.OperationType;
+import org.penguinframework.test.type.OperationType;
 
 @Repeatable(TableValueSources.class)
 @Retention(RetentionPolicy.RUNTIME)
@@ -21,9 +21,9 @@ public @interface TableValueSource {
 
     String path() default "";
 
-    ExcelMeta excelMeta() default @ExcelMeta;
+    TableExcelMeta excelMeta() default @TableExcelMeta;
 
-    CsvMeta csvMeta() default @CsvMeta;
+    TableCsvMeta csvMeta() default @TableCsvMeta;
 
     OperationType operation() default OperationType.CLEAN_INSERT;
 }

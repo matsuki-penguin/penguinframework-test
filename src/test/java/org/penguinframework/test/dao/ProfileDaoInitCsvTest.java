@@ -10,10 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.penguinframework.example.Application;
 import org.penguinframework.example.dao.ProfileDao;
 import org.penguinframework.example.dao.entity.ProfileEntity;
-import org.penguinframework.test.database.annotation.CsvMeta;
+import org.penguinframework.test.database.annotation.TableCsvMeta;
 import org.penguinframework.test.database.annotation.TableValueSource;
-import org.penguinframework.test.database.annotation.type.OperationType;
 import org.penguinframework.test.extension.PenguinExtension;
+import org.penguinframework.test.type.OperationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
@@ -42,7 +42,7 @@ class ProfileDaoInitCsvTest {
 
     @Test
     @DisplayName("メソッド単位でCSVファイルから初期化したprofileテーブルのすべてのレコードが取得されること")
-    @TableValueSource(value = "prepare_for_method.csv", csvMeta = @CsvMeta(table = "profile"))
+    @TableValueSource(value = "prepare_for_method.csv", csvMeta = @TableCsvMeta(table = "profile"))
     void testFindAllMethodInit() {
         List<ProfileEntity> result = this.profileDao.findAll();
 
@@ -58,7 +58,7 @@ class ProfileDaoInitCsvTest {
 
     @Test
     @DisplayName("クラス単位とメソッド単位でCSVファイルから初期化したprofileテーブルのすべてのレコードが取得されること")
-    @TableValueSource(value = "prepare_for_method.csv", csvMeta = @CsvMeta(table = "profile"), operation = OperationType.INSERT)
+    @TableValueSource(value = "prepare_for_method.csv", csvMeta = @TableCsvMeta(table = "profile"), operation = OperationType.INSERT)
     void testFindAllClassMethodInit() {
         List<ProfileEntity> result = this.profileDao.findAll();
 

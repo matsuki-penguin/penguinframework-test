@@ -10,12 +10,12 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.operation.DatabaseOperation;
 import org.penguinframework.test.dataset.csv.CsvDataSet;
 
-public class CsvFileAdapter extends FileAdapter {
+public class CsvTableFileAdapter extends TableFileAdapter {
     private final String tableName;
     private final Charset charset;
     private final CSVFormat csvFormat;
 
-    public CsvFileAdapter(Connection connection, String tableName, Charset charset, CSVFormat csvFormat)
+    public CsvTableFileAdapter(Connection connection, String tableName, Charset charset, CSVFormat csvFormat)
             throws DatabaseUnitException {
         super(connection);
         this.tableName = tableName;
@@ -23,7 +23,7 @@ public class CsvFileAdapter extends FileAdapter {
         this.csvFormat = csvFormat;
     }
 
-    public CsvFileAdapter(Connection connection, String schema, String tableName, Charset charset, CSVFormat csvFormat)
+    public CsvTableFileAdapter(Connection connection, String schema, String tableName, Charset charset, CSVFormat csvFormat)
             throws DatabaseUnitException {
         super(connection, schema);
         this.tableName = tableName;
