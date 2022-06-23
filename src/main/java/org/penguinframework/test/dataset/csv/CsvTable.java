@@ -4,13 +4,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.compress.utils.FileNameUtils;
-import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
@@ -21,6 +18,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.datatype.DataType;
+import org.penguinframework.test.meta.CsvMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,14 +32,8 @@ public class CsvTable extends AbstractTable {
     /** Record data in CSV file. */
     private final List<CSVRecord> recordList;
 
-    /**
-     * Constructor for reading CSV files with UTF-8 character set from URL.
-     *
-     * @param url CSV file URL object.
-     */
-    public CsvTable(URL url) {
-        this(url, null, StandardCharsets.UTF_8, CSVFormat.DEFAULT);
-    }
+    /** String representing null. */
+    private final String nullString;
 
     /**
      * Constructor for reading CSV files from URL and character set.
@@ -49,14 +41,14 @@ public class CsvTable extends AbstractTable {
      * @param url       CSV file URL object.
      * @param tableName Table name to be set for metadata. If null, the file name is
      *                  used.
-     * @param charset   CSV file character set.
-     * @param csvFormat CSV file format.
+     * @param meta      CSV file meta data.
      */
-    public CsvTable(URL url, String tableName, Charset charset, CSVFormat csvFormat) {
+    public CsvTable(URL url, String tableName, CsvMeta meta) {
         List<String> headerNameList;
         try (BOMInputStream in = new BOMInputStream(url.openStream());
-                InputStreamReader reader = new InputStreamReader(in, charset);
-                CSVParser csvParser = csvFormat.builder().setHeader().setSkipHeaderRecord(true).build().parse(reader)) {
+                InputStreamReader reader = new InputStreamReader(in, meta.encoding());
+                CSVParser csvParser = meta.format().getCsvFormat().builder().setHeader().setSkipHeaderRecord(true)
+                        .build().parse(reader)) {
             headerNameList = csvParser.getHeaderNames();
             this.recordList = csvParser.getRecords();
         } catch (IOException e) {
@@ -68,6 +60,8 @@ public class CsvTable extends AbstractTable {
         Column[] columns = this.recordList.isEmpty() ? new Column[0] : this.createMetaData(headerNameList);
         this.metaData = new DefaultTableMetaData(
                 StringUtils.defaultIfEmpty(tableName, FileNameUtils.getBaseName(url.getPath())), columns);
+
+        this.nullString = meta.nullString();
     }
 
     private Column[] createMetaData(List<String> headerNameList) {
@@ -112,7 +106,8 @@ public class CsvTable extends AbstractTable {
         this.assertValidRowIndex(row);
 
         int columnIndex = this.getColumnIndex(column);
-        return this.recordList.get(row).get(columnIndex);
+        String value = this.recordList.get(row).get(columnIndex);
+        return this.nullString.equals(value) ? null : value;
     }
 
     /**

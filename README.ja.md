@@ -6,7 +6,7 @@ Penguin Testではテストデータや期待値をExcelファイルやCSVファ
 
 * アノテーションベースによるデータベースの初期化
 * アノテーションベースによるJava Beanの初期化
-* データベースに格納されている値のアサーション (未実装)
+* データベースに格納されている値のアサーション
 * Java Beanに格納されている値のアサーション (未実装)
 
 ## Penguin Testの有効化
@@ -98,3 +98,53 @@ class ProfileDaoInitExcelTest {
 
 ➊ Java Beanを初期化する内容を記載したファイルのパスを指定したTableValueSourceアノテーションをクラス変数に指定します。  
 ➋ Java Beanを初期化する内容を記載したファイルのパスを指定したTableValueSourceアノテーションをテストメソッドの引数に指定します。
+
+## データベースのアサーション
+
+### 期待値ファイルの用意
+
+アサーションの期待値ファイルはExcelファイル、CSVファイルのいずれかの形式で作成します。  
+Excelファイルの場合はアサーションするテーブル名と同一のシート名に期待値を記載します。  
+どちらのファイル形式も1行目はヘッダ行で、初期化する列名を羅列し、2行目以降に初期化する内容を指定します。
+
+### データベースのアサーション方法
+
+TableAssertionクラスにより、データベースをアサーションします。  
+アサーションにはTableAssertionクラスのインスタンスを使用するので、TableAssertionクラスの変数を宣言する必要があります。  
+TableAssertionクラスは明示的にインスタンス化する必要はなく、インスタンス変数、もしくはテストメソッドの引数を宣言し、@Loadアノテーションを指定すると、自動的にインスタンスが注入されます。  
+TableAssertionクラスのアサーションメソッドにより、期待値ファイルとテーブルの値を比較することができます。
+
+```java
+@ExtendWith(PenguinExtension.class)
+class ProfileDaoInitExcelTest {
+
+    @Autowired
+    private ProfileDao profileDao;
+
+    @Load
+    private TableAssertion tableAssertion;                                      ➊
+
+    @Test
+    void update() {
+        ProfileEntity profile = new ProfileEntity();
+        profile.setName("update");
+        profile.setBirthday(LocalDate.of(2012, 12, 31));
+        this.profileDao.updateById(1L, profile);
+
+        this.tableAssertion.assertEquals("expected_update.xlsx", "PROFILE");    ➋
+    }
+
+    @Test
+    void insert(@Load TableAssertion assertion) {                               ➌
+        ・
+        ・
+        ・
+
+        assertion.assertEquals("expected_insert.xlsx", "PROFILE");              ➍
+    }
+```
+
+➊ TableAssertion型のフィールドを宣言して@Loadアノテーションを指定します。  
+➋ 宣言したTableAssertion型のフィールドのassertEqualsメソッドを使用して期待値ファイルとテーブルを比較します。  
+➌ TableAssertion型の引数を宣言して@Loadアノテーションを指定します。  
+➍ 宣言したTableAssertion型の引数のassertEqualsメソッドを使用して期待値ファイルとテーブルを比較します。

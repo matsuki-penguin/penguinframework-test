@@ -6,7 +6,7 @@ Penguin Test can manage test data and expected values in Excel and CSV files, wh
 
 * Annotation-based database initialization
 * Annotation-based Java Bean Initialization
-* Assertions for values stored in the database (unimplement)
+* Assertions for values stored in the database
 * Assertion of the value stored in the Java Bean (unimplement)
 
 ## Enable Penguin Test
@@ -98,3 +98,53 @@ class ProfileDaoInitExcelTest {
 
 ➊ Specify a TableValueSource annotation to the class variable that specifies the path to the file containing the contents of initializing the Java bean.  
 ➋ A TableValueSource annotation specifying the path to a file containing the contents of initializing the Java bean is specified as an argument to the test method.
+
+## Database assertions
+
+### Preparing an expectation file
+
+The assertion expectation file can be in the form of an Excel file or a CSV file.  
+In the case of an Excel file, the expected value is listed in the same sheet name as the name of the table to be asserted.  
+In both file formats, the first line is a header line that lists the column names to be initialized, and the second and subsequent lines specify the contents to be initialized.
+
+### Database assertion methods
+
+The TableAssertion class allows for database assertions.  
+Since an instance of the TableAssertion class is used for assertions, it is necessary to declare a variable of the TableAssertion class.  
+The TableAssertion class does not need to be explicitly instantiated, but rather an instance is automatically injected when an instance variable or test method argument is declared and the @Load annotation is specified.  
+The assertion methods of the TableAssertion class allow comparison of expected value files and table values.
+
+```java
+@ExtendWith(PenguinExtension.class)
+class ProfileDaoInitExcelTest {
+
+    @Autowired
+    private ProfileDao profileDao;
+
+    @Load
+    private TableAssertion tableAssertion;                                      ➊
+
+    @Test
+    void update() {
+        ProfileEntity profile = new ProfileEntity();
+        profile.setName("update");
+        profile.setBirthday(LocalDate.of(2012, 12, 31));
+        this.profileDao.updateById(1L, profile);
+
+        this.tableAssertion.assertEquals("expected_update.xlsx", "PROFILE");    ➋
+    }
+
+    @Test
+    void insert(@Load TableAssertion assertion) {                               ➌
+        ・
+        ・
+        ・
+
+        assertion.assertEquals("expected_insert.xlsx", "PROFILE");              ➍
+    }
+```
+
+➊ Declare a field of type TableAssertion and specify the @Load annotation.  
+➋ Compare the table with the expected value file using the assertEquals method of the declared TableAssertion type field.  
+➌ Declare arguments of type TableAssertion and specify @Load annotation.  
+➍ Compare the table with the expected value file using the assertEquals method of the argument of the declared TableAssertion type.

@@ -3,8 +3,6 @@ package org.penguinframework.test.dataset.excel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -15,33 +13,33 @@ import org.dbunit.dataset.DefaultTableIterator;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.OrderedTableNameMap;
+import org.penguinframework.test.meta.ExcelMeta;
 
 public class ExcelDataSet extends AbstractDataSet {
 
     private final OrderedTableNameMap tables;
 
-    public ExcelDataSet(URL url) throws IOException, DataSetException {
-        this(url, Collections.emptyMap());
-    }
-
     /**
      * Creates a new XlsDataSet object that loads the specified Excel document.
+     *
+     * @param url  Excel file URL object.
+     * @param meta Excel file meta data.
+     * @throws IOException
+     * @throws DataSetException
      */
-    public ExcelDataSet(URL url, Map<String, String> remapSheetName) throws IOException, DataSetException {
+    public ExcelDataSet(URL url, ExcelMeta meta) throws IOException, DataSetException {
         this.tables = super.createTableNameMap();
 
-        Workbook workbook;
-        try {
-            workbook = WorkbookFactory.create(url.openStream());
+        try (Workbook workbook = WorkbookFactory.create(url.openStream())) {
+            int sheetCount = workbook.getNumberOfSheets();
+            for (int i = 0; i < sheetCount; i++) {
+                String sheetName = meta.remapSheetName().getOrDefault(workbook.getSheetName(i),
+                        workbook.getSheetName(i));
+                ITable table = new ExcelTable(sheetName, workbook.getSheetAt(i));
+                this.tables.add(table.getTableMetaData().getTableName(), table);
+            }
         } catch (EncryptedDocumentException e) {
             throw new IOException(e);
-        }
-
-        int sheetCount = workbook.getNumberOfSheets();
-        for (int i = 0; i < sheetCount; i++) {
-            String sheetName = remapSheetName.getOrDefault(workbook.getSheetName(i), workbook.getSheetName(i));
-            ITable table = new ExcelTable(sheetName, workbook.getSheetAt(i));
-            this.tables.add(table.getTableMetaData().getTableName(), table);
         }
     }
 
