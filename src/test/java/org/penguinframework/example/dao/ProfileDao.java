@@ -10,5 +10,7 @@ public interface ProfileDao {
 
     ProfileEntity findById(long id);
 
+    int insert(ProfileEntity profile);
+
     int updateById(long id, ProfileEntity profile);
 }

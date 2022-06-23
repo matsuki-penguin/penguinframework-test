@@ -22,6 +22,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.penguinframework.test.meta.Meta;
 
 @DisplayName("FileAdapter")
 public class BeanFileAdapterTest {
@@ -42,7 +43,7 @@ public class BeanFileAdapterTest {
             }
 
             Type type = FieldUtils.getDeclaredField(MockClass.class, "profile").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type);
             Assertions.assertEquals(Profile.class, FieldUtils.readField(fileAdapter, "actualClass", true));
@@ -60,7 +61,7 @@ public class BeanFileAdapterTest {
             }
 
             Type type = FieldUtils.getDeclaredField(MockClass.class, "profiles").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type);
             Assertions.assertEquals(Profile.class, FieldUtils.readField(fileAdapter, "actualClass", true));
@@ -78,7 +79,7 @@ public class BeanFileAdapterTest {
             }
 
             Type type = FieldUtils.getDeclaredField(MockClass.class, "profileList").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type);
             Assertions.assertEquals(Profile.class, FieldUtils.readField(fileAdapter, "actualClass", true));
@@ -96,7 +97,7 @@ public class BeanFileAdapterTest {
             }
 
             Type type = FieldUtils.getDeclaredField(MockClass.class, "classList").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type);
             Assertions.assertEquals(Class.class, FieldUtils.readField(fileAdapter, "actualClass", true));
@@ -114,7 +115,7 @@ public class BeanFileAdapterTest {
             }
 
             Type type = FieldUtils.getDeclaredField(MockClass.class, "array").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
                     () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
@@ -132,7 +133,7 @@ public class BeanFileAdapterTest {
             }
 
             Type type = FieldUtils.getDeclaredField(MockClass.class, "array").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
                     () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
@@ -150,7 +151,7 @@ public class BeanFileAdapterTest {
             }
 
             Type type = FieldUtils.getDeclaredField(MockClass.class, "list").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
                     () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
@@ -168,7 +169,7 @@ public class BeanFileAdapterTest {
             }
 
             Type type = FieldUtils.getDeclaredField(MockClass.class, "list").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
                     () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
@@ -186,7 +187,7 @@ public class BeanFileAdapterTest {
             }
 
             Type type = FieldUtils.getDeclaredField(MockClass.class, "list").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
                     () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
@@ -204,7 +205,7 @@ public class BeanFileAdapterTest {
             }
 
             Type type = FieldUtils.getDeclaredField(MockClass.class, "list").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
                     () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
@@ -228,7 +229,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 1, "penguin", "2002-1-1" });
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
             FieldUtils.writeField(fileAdapter, "actualClass", Profile.class, true);
             FieldUtils.writeField(fileAdapter, "isArray", false, true);
             FieldUtils.writeField(fileAdapter, "isList", false, true);
@@ -252,7 +253,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 1, "penguin", "2002-1-1" });
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
             FieldUtils.writeField(fileAdapter, "actualClass", Profile.class, true);
             FieldUtils.writeField(fileAdapter, "isArray", true, true);
             FieldUtils.writeField(fileAdapter, "isList", false, true);
@@ -279,7 +280,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 1, "penguin", "2002-1-1" });
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
             FieldUtils.writeField(fileAdapter, "actualClass", Profile.class, true);
             FieldUtils.writeField(fileAdapter, "isArray", false, true);
             FieldUtils.writeField(fileAdapter, "isList", true, true);
@@ -315,7 +316,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 1, "penguin", "2002-1-1" });
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, 0, Profile.class);
 
@@ -336,7 +337,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 1, "penguin", "2002-1-1" });
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, 1, Profile.class);
 
@@ -357,7 +358,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 1, "penguin", "2002-1-1" });
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, 1,
                     ProfileNoInitField.class);
@@ -378,7 +379,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 1, "penguin", "2002-1-1" });
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, 0,
                     ProfileBase.ProfileExtends.class);
@@ -398,7 +399,7 @@ public class BeanFileAdapterTest {
             DefaultTable table = new DefaultTable("Profile", new Column[] { new Column("clazz", DataType.UNKNOWN) });
             table.addRow(new Object[] { "java.util.List" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, 0,
                     TypeParameterField.class);
@@ -420,7 +421,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { "2020-1-2 1:23:45.678", "2021-2-3", "2:33:44", "2022-3-4 3:44:55.987654321",
                     "2022-12-31 23:59:59.999" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, 0,
                     LegacyDateType.class);
@@ -452,7 +453,7 @@ public class BeanFileAdapterTest {
                     java.sql.Timestamp.valueOf("2022-3-4 3:44:55.987654321"),
                     java.sql.Timestamp.valueOf("2022-12-31 23:59:59.999") });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, 0,
                     LegacyDateType.class);
@@ -495,7 +496,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { "2021-2-3", "2:33:44", "2022-3-4 3:44:55.987654321",
                     "2022-12-31 23:59:59.987654321", });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, 0, NewDateType.class);
 
@@ -521,7 +522,7 @@ public class BeanFileAdapterTest {
                     java.sql.Timestamp.valueOf("2022-3-4 3:44:55.987654321"),
                     java.sql.Timestamp.valueOf("2022-12-31 23:59:59.987654321") });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, 0, NewDateType.class);
 
@@ -544,7 +545,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 1, "penguin", "2002-1-1" });
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class, () -> MethodUtils
                     .invokeMethod(fileAdapter, true, this.methodName, table, 1, GenericTypeClass.class));
@@ -562,7 +563,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 1, "penguin", "2002-1-1" });
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class, () -> MethodUtils
                     .invokeMethod(fileAdapter, true, this.methodName, table, 1, GenericArrayTypeClass.class));
@@ -580,7 +581,7 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 1, "penguin", "2002-1-1" });
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY);
+            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
 
             InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class, () -> MethodUtils
                     .invokeMethod(fileAdapter, true, this.methodName, table, 1, NotSupportTypeClass.class));

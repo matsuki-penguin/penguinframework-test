@@ -4,29 +4,28 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Map;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.operation.DatabaseOperation;
 import org.penguinframework.test.dataset.excel.ExcelDataSet;
+import org.penguinframework.test.meta.ExcelMeta;
 
 public class ExcelTableFileAdapter extends TableFileAdapter {
-    private final Map<String, String> remapTableName;
+    private final ExcelMeta meta;
 
-    public ExcelTableFileAdapter(Connection connection, Map<String, String> remapTableName) throws DatabaseUnitException {
+    public ExcelTableFileAdapter(Connection connection, ExcelMeta meta) throws DatabaseUnitException {
         super(connection);
-        this.remapTableName = remapTableName;
+        this.meta = meta;
     }
 
-    public ExcelTableFileAdapter(Connection connection, String schema, Map<String, String> remapTableName)
-            throws DatabaseUnitException {
+    public ExcelTableFileAdapter(Connection connection, String schema, ExcelMeta meta) throws DatabaseUnitException {
         super(connection, schema);
-        this.remapTableName = remapTableName;
+        this.meta = meta;
     }
 
     @Override
     public void load(DatabaseOperation databaseOperation, URL url)
             throws IOException, SQLException, DatabaseUnitException {
-        databaseOperation.execute(this.connection, new ExcelDataSet(url, this.remapTableName));
+        databaseOperation.execute(this.connection, new ExcelDataSet(url, this.meta));
     }
 }

@@ -3,12 +3,9 @@ package org.penguinframework.test.database;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,8 +15,9 @@ import org.junit.platform.commons.util.AnnotationUtils;
 import org.penguinframework.test.database.adapter.CsvTableFileAdapter;
 import org.penguinframework.test.database.adapter.ExcelTableFileAdapter;
 import org.penguinframework.test.database.adapter.TableFileAdapter;
-import org.penguinframework.test.database.annotation.SheetMapping;
 import org.penguinframework.test.database.annotation.TableValueSource;
+import org.penguinframework.test.meta.CsvMeta;
+import org.penguinframework.test.meta.ExcelMeta;
 import org.penguinframework.test.type.FileType;
 
 public class TableLoader {
@@ -56,14 +54,12 @@ public class TableLoader {
         TableFileAdapter fileAdapter;
         switch (FileType.valueOf(url)) {
         case EXCEL:
-            Map<String, String> remapTableName = Arrays.stream(tableValueSource.excelMeta().sheetMapping())
-                    .collect(Collectors.toMap(SheetMapping::sheet, SheetMapping::table, (name1, name2) -> name1));
-            fileAdapter = new ExcelTableFileAdapter(connection, connection.getSchema(), remapTableName);
+            fileAdapter = new ExcelTableFileAdapter(connection, connection.getSchema(),
+                    ExcelMeta.of(tableValueSource.excelMeta()));
             break;
         case CSV:
-            fileAdapter = new CsvTableFileAdapter(connection, connection.getSchema(), tableValueSource.csvMeta().table(),
-                    Charset.forName(tableValueSource.csvMeta().encoding()),
-                    tableValueSource.csvMeta().format().getCsvFormat());
+            fileAdapter = new CsvTableFileAdapter(connection, connection.getSchema(),
+                    tableValueSource.csvMeta().table(), CsvMeta.of(tableValueSource.csvMeta()));
             break;
         default:
             return;

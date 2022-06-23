@@ -26,6 +26,12 @@ public class ProfileDaoImpl implements ProfileDao {
     }
 
     @Override
+    public int insert(ProfileEntity profile) {
+        return this.jdbcTemplate.update("insert into profile (id, name, birthday) values (?, ?, ?)", profile.getId(),
+                profile.getName(), profile.getBirthday());
+    }
+
+    @Override
     public int updateById(long id, ProfileEntity profile) {
         return this.jdbcTemplate.update("update profile set name = ?, birthday = ? where id = ?", profile.getName(),
                 profile.getBirthday(), id);

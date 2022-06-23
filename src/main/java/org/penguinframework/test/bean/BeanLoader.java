@@ -10,17 +10,18 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.dbunit.dataset.DataSetException;
 import org.junit.platform.commons.util.AnnotationUtils;
+import org.penguinframework.test.bean.adapter.BeanFileAdapter;
 import org.penguinframework.test.bean.adapter.CsvBeanFileAdapter;
 import org.penguinframework.test.bean.adapter.ExcelBeanFileAdapter;
-import org.penguinframework.test.bean.adapter.BeanFileAdapter;
 import org.penguinframework.test.bean.annotation.BeanValueSource;
+import org.penguinframework.test.meta.CsvMeta;
+import org.penguinframework.test.meta.ExcelMeta;
 import org.penguinframework.test.type.FileType;
 
 /**
@@ -128,11 +129,11 @@ public class BeanLoader {
         BeanFileAdapter fileAdapter;
         switch (fileType) {
         case EXCEL:
-            fileAdapter = new ExcelBeanFileAdapter(beanValueSource.excelMeta().sheet());
+            fileAdapter = new ExcelBeanFileAdapter(beanValueSource.excelMeta().sheet(),
+                    ExcelMeta.of(beanValueSource.excelMeta()));
             break;
         case CSV:
-            fileAdapter = new CsvBeanFileAdapter(Charset.forName(beanValueSource.csvMeta().encoding()),
-                    beanValueSource.csvMeta().format().getCsvFormat());
+            fileAdapter = new CsvBeanFileAdapter(CsvMeta.of(beanValueSource.csvMeta()));
             break;
         default:
             throw new IllegalArgumentException("Unknown file type. : " + path);

@@ -169,12 +169,12 @@ public abstract class BeanFileAdapter {
             }
 
             if (type == java.sql.Date.class) {
-                // java.sql.Dateの場合、時間部分は0クリア (日時オブジェクトから変換された場合にクリアされていないため)
+                // java.sql.Dateの場合、時間部分は0クリア (Excelの日時形式から変換された場合にクリアされていないため)
                 java.util.Date adjustDate = java.sql.Date.class.cast(value);
                 adjustDate = DateUtils.truncate(adjustDate, Calendar.DAY_OF_MONTH);
                 value = new java.sql.Date(adjustDate.getTime());
             } else if (type == java.sql.Time.class) {
-                // java.sql.Timeの場合、日付部分は1970-1-1、ミリ秒部分は0でクリア (日時オブジェクトから変換された場合にクリアされていないため)
+                // java.sql.Timeの場合、日付部分は1970-1-1、ミリ秒部分は0でクリア (Excelの日時形式から変換された場合にクリアされていないため)
                 java.util.Date adjustDate = java.sql.Time.class.cast(value);
                 adjustDate = DateUtils.setYears(adjustDate, 1970);
                 adjustDate = DateUtils.setMonths(adjustDate, 0);
