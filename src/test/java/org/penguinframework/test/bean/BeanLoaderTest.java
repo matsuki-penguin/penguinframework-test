@@ -36,8 +36,8 @@ import org.penguinframework.test.type.FileType;
 @DisplayName("BeanLoader")
 class BeanLoaderTest {
     @Nested
-    @DisplayName("void initFields(Object targetInstance)")
-    class initFields_object {
+    @DisplayName("Excelファイルによる検証")
+    class excel {
         @Test
         @DisplayName("クラス変数にExcel形式のBean初期化ファイルを指定したクラスのフィールドが初期化されること")
         @Tag("normal")
@@ -229,6 +229,7 @@ class BeanLoaderTest {
 
         @Test
         @DisplayName("サポートしている型のフィールドがExcel形式のBean初期化ファイルにより初期化されること")
+        @Tag("normal")
         void initAllTypesForExcelFile() throws Exception {
             class StubClass {
                 @BeanValueSource("prepare_for_all_types.xlsx")
@@ -287,6 +288,7 @@ class BeanLoaderTest {
 
         @Test
         @DisplayName("サポートしている型のフィールドが16桁を超える数値、ミリ秒以上の精度を含む時間はセルのフォーマットを文字列として入力したExcel形式のBean初期化ファイルにより初期化されること")
+        @Tag("normal")
         void initAllTypesForTextExcelFile() throws Exception {
             class StubClass {
                 @BeanValueSource("prepare_for_all_types_text.xlsx")
@@ -380,6 +382,7 @@ class BeanLoaderTest {
 
         @Test
         @DisplayName("インスタンス変数がBOMありUTF-8文字セットのCSVファイルにより初期化されること")
+        @Tag("normal")
         void testInitBomUtf8File() throws Exception {
             class StubClass {
                 @BeanValueSource("prepare_for_bean_bom_utf8.csv")
@@ -397,6 +400,7 @@ class BeanLoaderTest {
 
         @Test
         @DisplayName("インスタンス変数がBOMありUTF-16LE文字セットのCSVファイルにより初期化されること")
+        @Tag("normal")
         void testInitBomUtf16leFile() throws Exception {
             class StubClass {
                 @BeanValueSource(path = "prepare_for_bean_bom_utf16le.csv", csvMeta = @BeanCsvMeta(encoding = "UTF-16"))
@@ -414,6 +418,7 @@ class BeanLoaderTest {
 
         @Test
         @DisplayName("インスタンス変数がBOMありUTF-16BE文字セットのCSVファイルにより初期化されること")
+        @Tag("normal")
         void testInitBomUtf16beFile() throws Exception {
             class StubClass {
                 @BeanValueSource(path = "prepare_for_bean_bom_utf16be.csv", csvMeta = @BeanCsvMeta(encoding = "UTF-16"))
@@ -431,6 +436,7 @@ class BeanLoaderTest {
 
         @Test
         @DisplayName("インスタンス変数がShift-JIS文字セットのCSVファイルにより初期化されること")
+        @Tag("normal")
         void testInitSjisFile() throws Exception {
             class StubClass {
                 @BeanValueSource(path = "prepare_for_bean_sjis.csv", csvMeta = @BeanCsvMeta(encoding = "sjis"))
@@ -448,6 +454,7 @@ class BeanLoaderTest {
 
         @Test
         @DisplayName("インスタンス変数がタブ区切りのCSVファイルにより初期化されること")
+        @Tag("normal")
         void testInitTsvFormatFile() throws Exception {
             class StubClass {
                 @BeanValueSource(path = "prepare_for_bean.tsv", csvMeta = @BeanCsvMeta(format = CsvFormatType.TDF))
