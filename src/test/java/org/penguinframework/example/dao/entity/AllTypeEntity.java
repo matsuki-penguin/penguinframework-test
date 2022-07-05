@@ -22,7 +22,6 @@ public class AllTypeEntity {
     private Character charType;
     private byte[] blobType;
     private String clobType;
-//    private Long uuidType;
     private java.util.UUID uuidType;
     private boolean[] arrayType;
 

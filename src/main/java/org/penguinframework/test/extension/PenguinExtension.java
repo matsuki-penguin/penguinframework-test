@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.TestInstances;
 import org.penguinframework.test.annotation.Load;
 import org.penguinframework.test.bean.BeanLoader;
 import org.penguinframework.test.bean.annotation.BeanValueSource;
+import org.penguinframework.test.bean.assertion.BeanAssertion;
 import org.penguinframework.test.database.TableLoader;
 import org.penguinframework.test.database.assertion.TableAssertion;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -90,6 +91,17 @@ public class PenguinExtension implements BeforeAllCallback, BeforeEachCallback, 
                     FieldUtils.writeField(field, instance, tableAssertion, true);
                 }
             }
+
+            // BeanAssertionのインスタンス注入
+            BeanAssertion beanAssertion = new BeanAssertion(testClass);
+            this.setBeanAssertion(context, beanAssertion);
+            for (Object instance : instances.getAllInstances()) {
+                Field[] fields = FieldUtils.getFieldsListWithAnnotation(instance.getClass(), Load.class).stream()
+                        .filter(f -> f.getType() == BeanAssertion.class).toArray(Field[]::new);
+                for (Field field : fields) {
+                    FieldUtils.writeField(field, instance, beanAssertion, true);
+                }
+            }
         }
     }
 
@@ -105,7 +117,8 @@ public class PenguinExtension implements BeforeAllCallback, BeforeEachCallback, 
             throws ParameterResolutionException {
         return extensionContext.getTestClass().isPresent()
                 && (parameterContext.isAnnotated(BeanValueSource.class) || (parameterContext.isAnnotated(Load.class)
-                        && parameterContext.getParameter().getType() == TableAssertion.class));
+                        && (parameterContext.getParameter().getType() == TableAssertion.class
+                                || parameterContext.getParameter().getType() == BeanAssertion.class)));
     }
 
     @Override
@@ -118,7 +131,11 @@ public class PenguinExtension implements BeforeAllCallback, BeforeEachCallback, 
                 throw new ParameterResolutionException("Failed to create bean instance.", e);
             }
         } else if (parameterContext.isAnnotated(Load.class)) {
-            return this.getTableAssertion(extensionContext);
+            if (parameterContext.getParameter().getType() == TableAssertion.class) {
+                return this.getTableAssertion(extensionContext);
+            } else if (parameterContext.getParameter().getType() == BeanAssertion.class) {
+                return this.getBeanAssertion(extensionContext);
+            }
         }
 
         return null;
@@ -162,6 +179,16 @@ public class PenguinExtension implements BeforeAllCallback, BeforeEachCallback, 
     private TableAssertion getTableAssertion(ExtensionContext context) {
         Store store = this.getTestMethodStore(context);
         return store.get(TableAssertion.class, TableAssertion.class);
+    }
+
+    private void setBeanAssertion(ExtensionContext context, BeanAssertion beanAssertion) {
+        Store store = this.getTestMethodStore(context);
+        store.put(BeanAssertion.class, beanAssertion);
+    }
+
+    private BeanAssertion getBeanAssertion(ExtensionContext context) {
+        Store store = this.getTestMethodStore(context);
+        return store.get(BeanAssertion.class, BeanAssertion.class);
     }
 
     private Store getTestClassStore(ExtensionContext context) {

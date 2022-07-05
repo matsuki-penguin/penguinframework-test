@@ -7,7 +7,7 @@ Penguin Test can manage test data and expected values in Excel and CSV files, wh
 * Annotation-based database initialization
 * Annotation-based Java Bean Initialization
 * Assertions for values stored in the database
-* Assertion of the value stored in the Java Bean (unimplement)
+* Assertion of the value stored in the Java Bean
 
 ## Enable Penguin Test
 
@@ -74,7 +74,7 @@ class ProfileDaoInitExcelTest {
 The initialization file can be in the form of an Excel file or a CSV file.  
 In the case of an Excel file, a sheet matching the simple class name of the Java bean to be initialized is used.  
 In both file formats, the first line is a header line that lists the field names of the Java Bean to be initialized, and the contents to be initialized are specified on the second and subsequent lines.  
-In the case of a Java bean, the contents of the second line of the initialization file are used; in the case of a List of Java beans or an array, the number of elements is the number of lines after the second line of the initialization file.
+In the case of a single Java bean, it is initialized with the contents of the second line of the initialization file; in the case of a list of Java beans or an array, it is initialized with the number of elements as the number of lines after the second line of the initialization file.
 
 ### Java Bean initialization by annotation
 
@@ -105,7 +105,7 @@ class ProfileDaoInitExcelTest {
 
 The assertion expectation file can be in the form of an Excel file or a CSV file.  
 In the case of an Excel file, the expected value is listed in the same sheet name as the name of the table to be asserted.  
-In both file formats, the first line is a header line that lists the column names to be initialized, and the second and subsequent lines specify the contents to be initialized.
+In both file formats, the first line is a header line that lists the column names to be asserted, and the second and subsequent lines specify the expected values to be asserted.
 
 ### Database assertion methods
 
@@ -148,3 +148,49 @@ class ProfileDaoInitExcelTest {
 ➋ Compare the table with the expected value file using the assertEquals method of the declared TableAssertion type field.  
 ➌ Declare arguments of type TableAssertion and specify @Load annotation.  
 ➍ Compare the table with the expected value file using the assertEquals method of the argument of the declared TableAssertion type.
+
+## Java Bean Assertions
+
+### Preparing an Expectation File
+
+The assertion expectation file can be in the form of an Excel file or a CSV file.  
+In the case of Excel files, the sheet matching the simple class name of the Java bean to be asserted is used.  
+In both file formats, the first line is a header line that lists the field names of the Java Bean to be asserted, and the second and subsequent lines specify the expected values to be asserted.  
+For a single Java bean, the assertion is based on the second line of the expected value file; for a List of Java beans or an array, the assertion is based on the number of elements in the second and subsequent lines of the expected value file.
+
+### Java Bean Assertion Methods
+
+The BeanAssertion class asserts a Java Bean.  
+Since an instance of the BeanAssertion class is used for assertions, it is necessary to declare variables of the BeanAssertion class.  
+The BeanAssertion class does not need to be explicitly instantiated, but rather an instance is automatically injected when an instance variable or test method argument is declared and the @Load annotation is specified.  
+The assertion methods of the BeanAssertion class allow you to compare the expected value file with the value of a field in a Java Bean.
+
+```java
+@ExtendWith(PenguinExtension.class)
+class ProfileDaoInitExcelTest {
+
+    @Autowired
+    private ProfileDao profileDao;
+
+    @Load
+    private BeanAssertion beanAssertion;                                                       ➊
+
+    @Test
+    void find() {
+        ProfileEntity profile = this.profileDao.findById(1L);
+
+        this.beanAssertion.assertEquals("expected_find.xlsx", profile);                        ➋
+    }
+
+    @Test
+    void findAll(@Load BeanAssertion assertion) {                                              ➌
+        List<ProfileEntity> profileList = this.profileDao.findAll();
+
+        assertion.assertEquals("expected_find_all.xlsx", profileList, ProfileEntity.class);    ➍
+    }
+```
+
+➊ Declare a field of type BeanAssertion and specify @Load annotation.  
+➋ Compare the Java Bean with the expected value file using the assertEquals method of a field of declared BeanAssertion type.  
+➌ Declare arguments of type BeanAssertion and specify @Load annotation.  
+➍ The assertEquals method of the argument of the declared BeanAssertion type is used to compare the expected value file and Java Bean. If the Java Bean to be compared is a List, the third argument of the assertEquals method must specify the class that is the type of the List.

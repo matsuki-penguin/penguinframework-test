@@ -121,7 +121,12 @@ public class ExcelTable extends AbstractTable {
 
     private Long getDateValue(Cell cell) {
         // Excelの日付シリアル値(1900年1月1日からの日数)をJavaのDate型に変換
-        Date date = DateUtil.getJavaDate(cell.getNumericCellValue());
+        double dateSerial = cell.getNumericCellValue();
+        if (((int) Math.floor(dateSerial)) == 0) {
+            // Excelで日付部分が存在しないシリアル値の場合、日付部分を1970-1-1に修正
+            dateSerial += 25569;
+        }
+        Date date = DateUtil.getJavaDate(dateSerial);
 
         // JavaのDate型を1970年1月1日00:00:00 GMTからのミリ秒数に変換
         return Long.valueOf(date.getTime());

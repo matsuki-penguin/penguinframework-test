@@ -1,7 +1,6 @@
 package org.penguinframework.test.bean.adapter;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.dbunit.dataset.Column;
@@ -23,196 +21,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.penguinframework.test.meta.Meta;
+import org.penguinframework.test.support.BeanType;
 
-@DisplayName("FileAdapter")
+@DisplayName("BeanFileAdapter")
 public class BeanFileAdapterTest {
-
-    @Nested
-    @DisplayName("void analyzeType(Type type)")
-    class analyzeType_type {
-
-        private String methodName = "analyzeType";
-
-        @Test
-        @DisplayName("配列、java.util.Listのいずれでもない型が正しく解析できること")
-        @Tag("normal")
-        void singleBean() throws Exception {
-            class MockClass {
-                @SuppressWarnings("unused")
-                public Profile profile;
-            }
-
-            Type type = FieldUtils.getDeclaredField(MockClass.class, "profile").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-
-            MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type);
-            Assertions.assertEquals(Profile.class, FieldUtils.readField(fileAdapter, "actualClass", true));
-            Assertions.assertEquals(false, FieldUtils.readField(fileAdapter, "isArray", true));
-            Assertions.assertEquals(false, FieldUtils.readField(fileAdapter, "isList", true));
-        }
-
-        @Test
-        @DisplayName("配列型が正しく解析できること")
-        @Tag("normal")
-        void arrayBean() throws Exception {
-            class MockClass {
-                @SuppressWarnings("unused")
-                public Profile[] profiles;
-            }
-
-            Type type = FieldUtils.getDeclaredField(MockClass.class, "profiles").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-
-            MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type);
-            Assertions.assertEquals(Profile.class, FieldUtils.readField(fileAdapter, "actualClass", true));
-            Assertions.assertEquals(true, FieldUtils.readField(fileAdapter, "isArray", true));
-            Assertions.assertEquals(false, FieldUtils.readField(fileAdapter, "isList", true));
-        }
-
-        @Test
-        @DisplayName("java.util.List型が正しく解析できること")
-        @Tag("normal")
-        void listBean() throws Exception {
-            class MockClass {
-                @SuppressWarnings("unused")
-                public List<Profile> profileList;
-            }
-
-            Type type = FieldUtils.getDeclaredField(MockClass.class, "profileList").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-
-            MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type);
-            Assertions.assertEquals(Profile.class, FieldUtils.readField(fileAdapter, "actualClass", true));
-            Assertions.assertEquals(false, FieldUtils.readField(fileAdapter, "isArray", true));
-            Assertions.assertEquals(true, FieldUtils.readField(fileAdapter, "isList", true));
-        }
-
-        @Test
-        @DisplayName("java.util.List型の型パラメータにさらに型パラメータがあるフィールドが正しく解析できること")
-        @Tag("normal")
-        void listInParamTypeBean() throws Exception {
-            class MockClass {
-                @SuppressWarnings("unused")
-                public List<Class<?>> classList;
-            }
-
-            Type type = FieldUtils.getDeclaredField(MockClass.class, "classList").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-
-            MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type);
-            Assertions.assertEquals(Class.class, FieldUtils.readField(fileAdapter, "actualClass", true));
-            Assertions.assertEquals(false, FieldUtils.readField(fileAdapter, "isArray", true));
-            Assertions.assertEquals(true, FieldUtils.readField(fileAdapter, "isList", true));
-        }
-
-        @Test
-        @DisplayName("総称型が指定されているフィールドはエラーとなること")
-        @Tag("error")
-        void typeVariable() {
-            class MockClass<T> {
-                @SuppressWarnings("unused")
-                public T array;
-            }
-
-            Type type = FieldUtils.getDeclaredField(MockClass.class, "array").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-
-            InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
-                    () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
-            Assertions.assertInstanceOf(IllegalArgumentException.class, e.getCause());
-            Assertions.assertTrue(StringUtils.containsIgnoreCase(e.getCause().getMessage(), "generic"));
-        }
-
-        @Test
-        @DisplayName("総称型の配列が指定されているフィールドはエラーとなること")
-        @Tag("error")
-        void genericArrayType() {
-            class MockClass<T> {
-                @SuppressWarnings("unused")
-                public T[] array;
-            }
-
-            Type type = FieldUtils.getDeclaredField(MockClass.class, "array").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-
-            InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
-                    () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
-            Assertions.assertInstanceOf(IllegalArgumentException.class, e.getCause());
-            Assertions.assertTrue(StringUtils.containsIgnoreCase(e.getCause().getMessage(), "generic array"));
-        }
-
-        @Test
-        @DisplayName("型パラメータが指定されていないjava.util.List型のフィールドはエラーとなること")
-        @Tag("error")
-        void noParameterizedTypeList() {
-            class MockClass {
-                @SuppressWarnings({ "unused", "rawtypes" })
-                public List list;
-            }
-
-            Type type = FieldUtils.getDeclaredField(MockClass.class, "list").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-
-            InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
-                    () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
-            Assertions.assertInstanceOf(IllegalArgumentException.class, e.getCause());
-            Assertions.assertTrue(StringUtils.containsIgnoreCase(e.getCause().getMessage(), "no type parameter"));
-        }
-
-        @Test
-        @DisplayName("型パラメータにワイルドカードが指定されているjava.util.List型のフィールドはエラーとなること")
-        @Tag("error")
-        void wildcardTypeList() {
-            class MockClass {
-                @SuppressWarnings("unused")
-                public List<?> list;
-            }
-
-            Type type = FieldUtils.getDeclaredField(MockClass.class, "list").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-
-            InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
-                    () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
-            Assertions.assertInstanceOf(IllegalArgumentException.class, e.getCause());
-            Assertions.assertTrue(StringUtils.containsIgnoreCase(e.getCause().getMessage(), "wildcard"));
-        }
-
-        @Test
-        @DisplayName("型パラメータに総称型が指定されているjava.util.List型のフィールドはエラーとなること")
-        @Tag("error")
-        void typeVariableList() {
-            class MockClass<T> {
-                @SuppressWarnings("unused")
-                public List<T> list;
-            }
-
-            Type type = FieldUtils.getDeclaredField(MockClass.class, "list").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-
-            InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
-                    () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
-            Assertions.assertInstanceOf(IllegalArgumentException.class, e.getCause());
-            Assertions.assertTrue(StringUtils.containsIgnoreCase(e.getCause().getMessage(), "generic"));
-        }
-
-        @Test
-        @DisplayName("型パラメータに総称型の配列が指定されているjava.util.List型のフィールドはエラーとなること")
-        @Tag("error")
-        void genericArrayTypeList() {
-            class MockClass<T> {
-                @SuppressWarnings("unused")
-                public List<T[]> list;
-            }
-
-            Type type = FieldUtils.getDeclaredField(MockClass.class, "list").getGenericType();
-            BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-
-            InvocationTargetException e = Assertions.assertThrows(InvocationTargetException.class,
-                    () -> MethodUtils.invokeMethod(fileAdapter, true, this.methodName, type));
-            Assertions.assertInstanceOf(IllegalArgumentException.class, e.getCause());
-            Assertions.assertTrue(StringUtils.containsIgnoreCase(e.getCause().getMessage(), "generic array"));
-        }
-    }
 
     @Nested
     @DisplayName("Object toBean(ITable table)")
@@ -230,11 +42,12 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
             BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-            FieldUtils.writeField(fileAdapter, "actualClass", Profile.class, true);
-            FieldUtils.writeField(fileAdapter, "isArray", false, true);
-            FieldUtils.writeField(fileAdapter, "isList", false, true);
+            BeanType.Info info = new BeanType.Info();
+            info.setActualClass(Profile.class);
+            info.setArray(false);
+            info.setList(false);
 
-            Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table);
+            Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, info);
 
             Assertions.assertNotNull(result);
             Assertions.assertInstanceOf(Profile.class, result);
@@ -254,11 +67,12 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
             BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-            FieldUtils.writeField(fileAdapter, "actualClass", Profile.class, true);
-            FieldUtils.writeField(fileAdapter, "isArray", true, true);
-            FieldUtils.writeField(fileAdapter, "isList", false, true);
+            BeanType.Info info = new BeanType.Info();
+            info.setActualClass(Profile.class);
+            info.setArray(true);
+            info.setList(false);
 
-            Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table);
+            Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, info);
 
             Assertions.assertNotNull(result);
             Assertions.assertInstanceOf(Profile[].class, result);
@@ -281,11 +95,12 @@ public class BeanFileAdapterTest {
             table.addRow(new Object[] { 2, "matsuki", "2010-12-3" });
 
             BeanFileAdapter fileAdapter = new ExcelBeanFileAdapter(StringUtils.EMPTY, Meta.excel());
-            FieldUtils.writeField(fileAdapter, "actualClass", Profile.class, true);
-            FieldUtils.writeField(fileAdapter, "isArray", false, true);
-            FieldUtils.writeField(fileAdapter, "isList", true, true);
+            BeanType.Info info = new BeanType.Info();
+            info.setActualClass(Profile.class);
+            info.setArray(false);
+            info.setList(true);
 
-            Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table);
+            Object result = MethodUtils.invokeMethod(fileAdapter, true, this.methodName, table, info);
 
             Assertions.assertNotNull(result);
             Assertions.assertInstanceOf(List.class, result);
@@ -518,7 +333,7 @@ public class BeanFileAdapterTest {
                     new Column[] { new Column("localDate", DataType.UNKNOWN), new Column("localTime", DataType.UNKNOWN),
                             new Column("localDateTime", DataType.UNKNOWN), new Column("instant", DataType.UNKNOWN) });
             table.addRow(new Object[] { java.sql.Timestamp.valueOf("2021-2-3 1:23:45.678"),
-                    java.sql.Timestamp.valueOf("2020-1-2 2:33:44.567"),
+                    java.sql.Timestamp.valueOf("2020-1-2 2:33:44.567000123"),
                     java.sql.Timestamp.valueOf("2022-3-4 3:44:55.987654321"),
                     java.sql.Timestamp.valueOf("2022-12-31 23:59:59.987654321") });
 
@@ -530,7 +345,7 @@ public class BeanFileAdapterTest {
             Assertions.assertInstanceOf(NewDateType.class, result);
             NewDateType dateType = NewDateType.class.cast(result);
             Assertions.assertEquals(LocalDate.of(2021, 2, 3), dateType.localDate);
-            Assertions.assertEquals(LocalTime.of(2, 33, 44, 567000000), dateType.localTime);
+            Assertions.assertEquals(LocalTime.of(2, 33, 44, 567000123), dateType.localTime);
             Assertions.assertEquals(LocalDateTime.of(2022, 3, 4, 3, 44, 55, 987654321), dateType.localDateTime);
             Assertions.assertEquals(java.sql.Timestamp.valueOf("2022-12-31 23:59:59.987654321").toInstant(),
                     dateType.instant);

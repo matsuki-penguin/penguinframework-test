@@ -97,8 +97,7 @@ class TableAssertionTest {
                 entity.setDecimalType(new BigDecimal("3.1415926535898"));
                 entity.setDoubleType(3.141592D);
                 entity.setRealType(3.14F);
-                entity.setTimeType(java.sql.Time.valueOf("13:14:15")); // 期待値のファイルには「HH:mm:ss」の文字列、もしくはExcelの場合は「1971-1-1
-                                                                       // HH:mm:ss」の日付フォーマットで記述
+                entity.setTimeType(java.sql.Time.valueOf("13:14:15")); // 期待値のファイルには「HH:mm:ss」の文字列、もしくはExcelの場合は日付なしの時間フォーマットで記述
                 entity.setDateType(java.sql.Date.valueOf("2021-11-30"));
                 entity.setTimestampType(java.sql.Timestamp.valueOf("2021-11-30 13:14:15"));
                 entity.setBinaryType(new byte[] { 0x41, 0x42, 0x43 }); // 期待値のファイルには期待値「ABC」をbase64でエンコードしたものを記述
@@ -211,8 +210,7 @@ class TableAssertionTest {
                 entity.setDecimalType(new BigDecimal("3.1415926535898"));
                 entity.setDoubleType(3.141592D);
                 entity.setRealType(3.14F);
-                entity.setTimeType(java.sql.Time.valueOf("13:14:15")); // 期待値のファイルには「HH:mm:ss」の文字列、もしくはExcelの場合は「1971-1-1
-                                                                       // HH:mm:ss」の日付フォーマットで記述
+                entity.setTimeType(java.sql.Time.valueOf("13:14:15")); // 期待値のファイルには「HH:mm:ss」の文字列、もしくはExcelの場合は日付なしの時間フォーマットで記述
                 entity.setDateType(java.sql.Date.valueOf("2021-11-30"));
                 entity.setTimestampType(java.sql.Timestamp.valueOf("2021-11-30 13:14:15"));
                 entity.setBinaryType(new byte[] { 0x41, 0x42, 0x43 }); // 期待値のファイルには期待値「ABC」をbase64でエンコードしたものを記述
