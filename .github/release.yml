@@ -1,7 +1,7 @@
 changelog:
   exclude:
     labels:
-      - ignore release
+      - ignore-release
   categories:
     - title: Features
       labels:
