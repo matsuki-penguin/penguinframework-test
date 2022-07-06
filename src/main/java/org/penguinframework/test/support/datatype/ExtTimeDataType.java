@@ -4,30 +4,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
-import java.time.format.SignStyle;
-import java.time.temporal.ChronoField;
+import java.util.Calendar;
 
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.AbstractDataType;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.penguinframework.test.support.DateTimeUtils;
 
-public class LocalTimeDataType extends AbstractDataType {
+public class ExtTimeDataType extends AbstractDataType {
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(LocalTimeDataType.class);
-
-    LocalTimeDataType() {
+    ExtTimeDataType() {
         super("TIME", Types.TIME, LocalTime.class, false);
     }
 
@@ -42,35 +32,38 @@ public class LocalTimeDataType extends AbstractDataType {
 
         if (value instanceof LocalTime) {
             return value;
+        } else if (value instanceof java.sql.Time) {
+            return java.sql.Time.class.cast(value).toLocalTime();
+        } else if (value instanceof java.util.Date) {
+            return new java.sql.Time(java.util.Date.class.cast(value).getTime()).toLocalTime();
+        } else if (value instanceof Calendar) {
+            return new java.sql.Time(Calendar.class.cast(value).getTime().getTime()).toLocalTime();
+        } else if (value instanceof Instant) {
+            return java.sql.Timestamp.from(Instant.class.cast(value)).toLocalDateTime().toLocalTime();
+        } else if (value instanceof Long) {
+            return new java.sql.Time(Long.class.cast(value).longValue()).toLocalTime();
         }
 
         if (value instanceof String) {
-            final String stringValue = (String) value;
+            String stringValue = String.class.cast(value);
 
             if (DataType.isExtendedSyntax(stringValue)) {
                 // Relative date.
                 try {
-                    LocalDateTime datetime = DataType.RELATIVE_DATE_TIME_PARSER.parse(stringValue);
-                    return datetime.toLocalTime();
+                    return DataType.RELATIVE_DATE_TIME_PARSER.parse(stringValue).toLocalTime();
                 } catch (IllegalArgumentException | DateTimeParseException e) {
                     throw new TypeCastException(value, this, e);
                 }
             }
 
-            DateTimeFormatter isoLocalTime = new DateTimeFormatterBuilder()
-                    .appendValue(ChronoField.HOUR_OF_DAY, 1, 2, SignStyle.NOT_NEGATIVE).appendLiteral(':')
-                    .appendValue(ChronoField.MINUTE_OF_HOUR, 1, 2, SignStyle.NOT_NEGATIVE).optionalStart()
-                    .appendLiteral(':').appendValue(ChronoField.SECOND_OF_MINUTE, 1, 2, SignStyle.NOT_NEGATIVE)
-                    .optionalStart().appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true).toFormatter()
-                    .withResolverStyle(ResolverStyle.STRICT);
             try {
-                return LocalTime.parse(stringValue, isoLocalTime);
-            } catch (DateTimeParseException e) {
+                return DateTimeUtils.toLocalTime(stringValue);
+            } catch (IllegalArgumentException e) {
                 throw new TypeCastException(value, this, e);
             }
         }
 
-        return java.sql.Time.class.cast(DataType.TIME.typeCast(value)).toLocalTime();
+        throw new TypeCastException(value, this);
     }
 
     @Override
