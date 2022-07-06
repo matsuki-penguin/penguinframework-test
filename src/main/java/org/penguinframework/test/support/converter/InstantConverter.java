@@ -11,7 +11,7 @@ public class InstantConverter extends AbstractDateTimeConverter {
         java.sql.Timestamp timestamp = this.toTimestamp(value);
 
         if (timestamp != null) {
-            this.fromTimestamp(type, timestamp);
+            return this.fromTimestamp(type, timestamp);
         }
 
         // Convert all other types to String & handle
