@@ -73,7 +73,11 @@ public class ExtTimestampDataType extends AbstractDataType {
 
     @Override
     public Object getSqlValue(int column, ResultSet resultSet) throws SQLException, TypeCastException {
-        return java.sql.Timestamp.class.cast(DataType.TIMESTAMP.getSqlValue(column, resultSet)).toLocalDateTime();
+        Object sqlValue = DataType.TIMESTAMP.getSqlValue(column, resultSet);
+        if (sqlValue == null) {
+            return sqlValue;
+        }
+        return java.sql.Timestamp.class.cast(sqlValue).toLocalDateTime();
     }
 
     @Override

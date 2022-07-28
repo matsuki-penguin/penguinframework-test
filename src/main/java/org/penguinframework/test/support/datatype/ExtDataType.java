@@ -58,6 +58,16 @@ public abstract class ExtDataType extends DataType {
             DataType.BIGINT_AUX_LONG // Java type is java.lang.Long, SQL type is Types.BIGINT
     };
 
+    private static final Map<DataType, DataType> REMAP_DATA_TYPE_MAP = new HashMap<>();
+
+    static {
+        ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.BLOB, ExtDataType.EXT_BLOB);
+        ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.CLOB, ExtDataType.EXT_CLOB);
+        ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.DATE, ExtDataType.EXT_DATE);
+        ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.TIME, ExtDataType.EXT_TIME);
+        ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.TIMESTAMP, ExtDataType.EXT_TIMESTAMP);
+    }
+
     private static final Map<Class<?>, DataType> JAVA_TYPE_MAP = new HashMap<>();
 
     static {
@@ -106,6 +116,10 @@ public abstract class ExtDataType extends DataType {
         ExtDataType.logger.debug("asString(value={}) - start", value);
 
         return String.class.cast(DataType.VARCHAR.typeCast(value));
+    }
+
+    public static DataType remapForDataType(DataType sourceDataType) {
+        return ExtDataType.REMAP_DATA_TYPE_MAP.getOrDefault(sourceDataType, sourceDataType);
     }
 
     public static DataType forSqlType(int sqlType) {

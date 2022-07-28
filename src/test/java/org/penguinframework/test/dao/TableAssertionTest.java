@@ -14,19 +14,24 @@ import org.penguinframework.example.dao.ProfileDao;
 import org.penguinframework.example.dao.entity.AllTypeEntity;
 import org.penguinframework.example.dao.entity.ProfileEntity;
 import org.penguinframework.test.annotation.Load;
+import org.penguinframework.test.database.annotation.DatabaseMeta;
 import org.penguinframework.test.database.annotation.TableValueSource;
 import org.penguinframework.test.database.assertion.TableAssertion;
 import org.penguinframework.test.extension.PenguinExtension;
 import org.penguinframework.test.meta.Meta;
+import org.penguinframework.test.type.Platform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({ SpringExtension.class, PenguinExtension.class })
 @SpringBootTest(classes = Application.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@ActiveProfiles("h2")
+@DatabaseMeta(platform = Platform.H2)
 class TableAssertionTest {
 
     @Nested
@@ -93,7 +98,7 @@ class TableAssertionTest {
                 entity.setTinyintType((byte) 127);
                 entity.setSmallintType((short) 32767);
                 entity.setBigintType(999999999L);
-                entity.setIdentityType(1L);
+                entity.setIdentityType(2L);
                 entity.setDecimalType(new BigDecimal("3.1415926535898"));
                 entity.setDoubleType(3.141592D);
                 entity.setRealType(3.14F);
@@ -120,7 +125,7 @@ class TableAssertionTest {
             @DisplayName("主キー以外をNULLで挿入したレコードを検証できること")
             void insertNull() {
                 AllTypeEntity entity = new AllTypeEntity();
-                entity.setIdentityType(1L);
+                entity.setIdentityType(2L);
 
                 this.allTypeDao.insert(entity);
 
@@ -206,7 +211,7 @@ class TableAssertionTest {
                 entity.setTinyintType((byte) 127);
                 entity.setSmallintType((short) 32767);
                 entity.setBigintType(999999999L);
-                entity.setIdentityType(1L);
+                entity.setIdentityType(2L);
                 entity.setDecimalType(new BigDecimal("3.1415926535898"));
                 entity.setDoubleType(3.141592D);
                 entity.setRealType(3.14F);
@@ -233,7 +238,7 @@ class TableAssertionTest {
             @DisplayName("主キー以外をNULLで挿入したレコードを検証できること")
             void insertNull() {
                 AllTypeEntity entity = new AllTypeEntity();
-                entity.setIdentityType(1L);
+                entity.setIdentityType(2L);
 
                 this.allTypeDao.insert(entity);
 

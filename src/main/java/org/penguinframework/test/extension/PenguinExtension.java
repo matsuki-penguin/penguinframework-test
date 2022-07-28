@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.util.Objects;
 
 import javax.sql.DataSource;
 
@@ -24,6 +25,7 @@ import org.penguinframework.test.bean.BeanLoader;
 import org.penguinframework.test.bean.annotation.BeanValueSource;
 import org.penguinframework.test.bean.assertion.BeanAssertion;
 import org.penguinframework.test.database.TableLoader;
+import org.penguinframework.test.database.annotation.DatabaseMeta;
 import org.penguinframework.test.database.assertion.TableAssertion;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -75,14 +77,22 @@ public class PenguinExtension implements BeforeAllCallback, BeforeEachCallback, 
                     .getTransaction(transactionDefinition);
             this.setTransactionStatus(context, transactionStatus);
 
+            // テストクラスに指定されたDatabaseMetaアノテーションを取得
+            DatabaseMeta databaseMeta = context.getRequiredTestClass().getAnnotation(DatabaseMeta.class);
+            if (databaseMeta == null) {
+                databaseMeta = context.getRequiredTestInstances().getEnclosingInstances().stream().map(Object::getClass)
+                        .map(clazz -> clazz.getAnnotation(DatabaseMeta.class)).filter(Objects::nonNull).findFirst()
+                        .orElse(null);
+            }
+
             // TableValueSourceアノテーションで指定されているExcelファイルをデータベースにClean & Insert
             Connection connection = dataSource.getConnection();
-            TableLoader.load(testMethod, connection);
+            TableLoader.load(testMethod, connection, databaseMeta);
 
             // TableAssertionのインスタンス注入
             Class<?> testClass = context.getRequiredTestClass();
             TestInstances instances = context.getRequiredTestInstances();
-            TableAssertion tableAssertion = new TableAssertion(connection, testClass);
+            TableAssertion tableAssertion = new TableAssertion(connection, testClass, databaseMeta);
             this.setTableAssertion(context, tableAssertion);
             for (Object instance : instances.getAllInstances()) {
                 Field[] fields = FieldUtils.getFieldsListWithAnnotation(instance.getClass(), Load.class).stream()

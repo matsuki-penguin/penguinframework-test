@@ -5,16 +5,6 @@ create table profile (
     primary key (id)
 );
 
-insert into profile (
-    id,
-    name,
-    birthday
-) values (
-    1,
-    'init',
-    '1900-1-1'
-);
-
 create table all_type (
     int_type int,
     boolean_type boolean,
@@ -25,9 +15,9 @@ create table all_type (
     decimal_type decimal(20,15),
     double_type double,
     real_type real,
-    time_type time,
+    time_type time(9),
     date_type date,
-    timestamp_type timestamp,
+    timestamp_type timestamp(9),
     binary_type binary(3),
     other_type other,
     varchar_type varchar,

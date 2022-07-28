@@ -10,19 +10,24 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.penguinframework.example.Application;
 import org.penguinframework.example.dao.ProfileDao;
 import org.penguinframework.example.dao.entity.ProfileEntity;
+import org.penguinframework.test.database.annotation.DatabaseMeta;
 import org.penguinframework.test.database.annotation.TableCsvMeta;
 import org.penguinframework.test.database.annotation.TableValueSource;
 import org.penguinframework.test.extension.PenguinExtension;
 import org.penguinframework.test.type.OperationType;
+import org.penguinframework.test.type.Platform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({ SpringExtension.class, PenguinExtension.class })
 @SpringBootTest(classes = Application.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@ActiveProfiles("h2")
+@DatabaseMeta(platform = Platform.H2)
 @TableValueSource("profile.csv")
 class ProfileDaoInitCsvTest {
     @Autowired
