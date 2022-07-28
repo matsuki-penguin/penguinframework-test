@@ -15,6 +15,7 @@ import org.junit.platform.commons.util.AnnotationUtils;
 import org.penguinframework.test.database.adapter.CsvTableFileAdapter;
 import org.penguinframework.test.database.adapter.ExcelTableFileAdapter;
 import org.penguinframework.test.database.adapter.TableFileAdapter;
+import org.penguinframework.test.database.annotation.DatabaseMeta;
 import org.penguinframework.test.database.annotation.TableValueSource;
 import org.penguinframework.test.meta.CsvMeta;
 import org.penguinframework.test.meta.ExcelMeta;
@@ -24,7 +25,7 @@ public class TableLoader {
     private TableLoader() {
     }
 
-    public static void load(Method targetMethod, Connection connection)
+    public static void load(Method targetMethod, Connection connection, DatabaseMeta databaseMeta)
             throws DatabaseUnitException, IOException, SQLException {
         Class<?> targetClass = targetMethod.getDeclaringClass();
 
@@ -42,24 +43,24 @@ public class TableLoader {
                 .collect(Collectors.toList());
 
         for (TableValueSource tableValueSource : tableValueSourceList) {
-            TableLoader.loadFromAnnotation(tableValueSource, targetClass, connection);
+            TableLoader.loadFromAnnotation(tableValueSource, targetClass, connection, databaseMeta);
         }
     }
 
     private static void loadFromAnnotation(TableValueSource tableValueSource, Class<?> targetClass,
-            Connection connection) throws DatabaseUnitException, SQLException, IOException {
+            Connection connection, DatabaseMeta databaseMeta) throws DatabaseUnitException, SQLException, IOException {
         // 読み込むファイルのURLオブジェクトを生成
         URL url = targetClass.getResource(StringUtils.firstNonEmpty(tableValueSource.value(), tableValueSource.path()));
 
         TableFileAdapter fileAdapter;
         switch (FileType.valueOf(url)) {
         case EXCEL:
-            fileAdapter = new ExcelTableFileAdapter(connection, connection.getSchema(),
+            fileAdapter = new ExcelTableFileAdapter(connection, connection.getSchema(), databaseMeta,
                     ExcelMeta.of(tableValueSource.excelMeta()));
             break;
         case CSV:
             fileAdapter = new CsvTableFileAdapter(connection, connection.getSchema(),
-                    tableValueSource.csvMeta().table(), CsvMeta.of(tableValueSource.csvMeta()));
+                    tableValueSource.csvMeta().table(), databaseMeta, CsvMeta.of(tableValueSource.csvMeta()));
             break;
         default:
             return;

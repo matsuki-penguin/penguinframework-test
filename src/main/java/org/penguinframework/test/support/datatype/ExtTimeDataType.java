@@ -14,8 +14,12 @@ import org.dbunit.dataset.datatype.AbstractDataType;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
 import org.penguinframework.test.support.DateTimeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtTimeDataType extends AbstractDataType {
+
+    private static final Logger logger = LoggerFactory.getLogger(ExtTimeDataType.class);
 
     ExtTimeDataType() {
         super("TIME", Types.TIME, LocalTime.class, false);
@@ -41,7 +45,7 @@ public class ExtTimeDataType extends AbstractDataType {
         } else if (value instanceof Instant) {
             return java.sql.Timestamp.from(Instant.class.cast(value)).toLocalDateTime().toLocalTime();
         } else if (value instanceof Long) {
-            return new java.sql.Time(Long.class.cast(value).longValue()).toLocalTime();
+            return new java.sql.Timestamp(Long.class.cast(value).longValue()).toLocalDateTime().toLocalTime();
         }
 
         if (value instanceof String) {
@@ -73,12 +77,31 @@ public class ExtTimeDataType extends AbstractDataType {
 
     @Override
     public Object getSqlValue(int column, ResultSet resultSet) throws SQLException, TypeCastException {
-        return java.sql.Time.class.cast(DataType.TIME.getSqlValue(column, resultSet)).toLocalTime();
+        if (ExtTimeDataType.logger.isDebugEnabled()) {
+            ExtTimeDataType.logger.debug("getSqlValue(column={}, resultSet={}) - start", Integer.valueOf(column),
+                    resultSet);
+        }
+
+        String value = resultSet.getString(column);
+        if (value == null || resultSet.wasNull()) {
+            return null;
+        }
+
+        return DateTimeUtils.toLocalTime(value);
     }
 
     @Override
     public void setSqlValue(Object value, int column, PreparedStatement statement)
             throws SQLException, TypeCastException {
-        DataType.TIME.setSqlValue(java.sql.Time.valueOf(LocalTime.class.cast(this.typeCast(value))), column, statement);
+        if (ExtTimeDataType.logger.isDebugEnabled()) {
+            ExtTimeDataType.logger.debug("setSqlValue(value={}, column={}, statement={}) - start", value,
+                    Integer.valueOf(column), statement);
+        }
+
+        Object sqlValue = typeCast(value);
+        if (sqlValue != null) {
+            sqlValue = DateTimeUtils.toString(LocalTime.class.cast(typeCast(value)));
+        }
+        statement.setString(column, String.class.cast(sqlValue));
     }
 }

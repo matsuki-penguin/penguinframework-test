@@ -6,20 +6,30 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.operation.DatabaseOperation;
+import org.penguinframework.test.database.annotation.DatabaseMeta;
+import org.penguinframework.test.support.DatabaseUtils;
+import org.penguinframework.test.type.Platform;
 
 public abstract class TableFileAdapter {
-    protected DatabaseConnection connection;
+    protected IDatabaseConnection connection;
 
-    protected TableFileAdapter(Connection connection) throws DatabaseUnitException {
+    protected Platform platform;
+
+    protected TableFileAdapter(Connection connection, DatabaseMeta databaseMeta) throws DatabaseUnitException {
         super();
-        this.connection = new DatabaseConnection(connection);
+
+        this.platform = databaseMeta == null ? Platform.DEFAULT : databaseMeta.platform();
+        this.connection = DatabaseUtils.getDatabaseConnection(connection, this.platform);
     }
 
-    protected TableFileAdapter(Connection connection, String schema) throws DatabaseUnitException {
+    protected TableFileAdapter(Connection connection, String schema, DatabaseMeta databaseMeta)
+            throws DatabaseUnitException {
         super();
-        this.connection = new DatabaseConnection(connection, schema);
+
+        this.platform = databaseMeta == null ? Platform.DEFAULT : databaseMeta.platform();
+        this.connection = DatabaseUtils.getDatabaseConnection(connection, schema, this.platform);
     }
 
     public abstract void load(DatabaseOperation databaseOperation, URL url)

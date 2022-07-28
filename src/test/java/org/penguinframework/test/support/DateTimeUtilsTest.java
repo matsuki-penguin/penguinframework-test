@@ -279,7 +279,7 @@ public class DateTimeUtilsTest {
 
         @Test
         @DisplayName("日付と時間の日時文字列からLocalTimeクラスに変換するとエラーが発生すること")
-        @Tag("normal")
+        @Tag("error")
         void dateTimeFormat() throws Exception {
             IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
                     () -> DateTimeUtils.toLocalTime("2020-12-31 23:59:59.999"));
@@ -512,6 +512,257 @@ public class DateTimeUtilsTest {
         void nullFormat() throws Exception {
             IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
                     () -> DateTimeUtils.toInstant(null));
+            Assertions.assertEquals(NullPointerException.class, e.getCause().getClass());
+        }
+    }
+
+    @Nested
+    @DisplayName("java.sql.Date toSqlDate(String valueFrom)")
+    class toSqlDate_String {
+
+        @Test
+        @DisplayName("日付と時間の日時文字列からjava.sql.Dateクラスに変換するとエラーが発生すること")
+        @Tag("error")
+        void dateTimeFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toSqlDate("2020-12-31 23:59:59.999"));
+            Assertions.assertEquals(DateTimeParseException.class, e.getCause().getClass());
+        }
+
+        @Test
+        @DisplayName("0がトリムされたの日付文字列からjava.sql.Dateクラスに変換できること")
+        @Tag("normal")
+        void zeroTrimFormat() throws Exception {
+            java.sql.Date date = DateTimeUtils.toSqlDate("2020-1-2");
+
+            LocalDate expected = LocalDate.of(2020, 1, 2);
+            Assertions.assertEquals(java.sql.Date.valueOf(expected), date);
+        }
+
+        @Test
+        @DisplayName("ナノ秒まで指定された日時文字列からjava.sql.Dateクラスに変換するとエラーが発生すること")
+        @Tag("error")
+        void nanoSecondFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toSqlDate("2020-12-31 23:59:59.999999999"));
+            Assertions.assertEquals(DateTimeParseException.class, e.getCause().getClass());
+        }
+    }
+
+    @Nested
+    @DisplayName("java.sql.Time toSqlTime(String valueFrom)")
+    class toSqlTime_String {
+
+        @Test
+        @DisplayName("日付と時間の日時文字列からjava.sql.Timeクラスに変換するとエラーが発生すること")
+        @Tag("error")
+        void dateTimeFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toSqlTime("2020-12-31 23:59:59.999"));
+            Assertions.assertEquals(DateTimeParseException.class, e.getCause().getClass());
+        }
+
+        @Test
+        @DisplayName("0がトリムされたの日時文字列からjava.sql.Timeクラスに変換できること")
+        @Tag("normal")
+        void zeroTrimFormat() throws Exception {
+            java.sql.Time time = DateTimeUtils.toSqlTime("3:4:5.6");
+
+            java.sql.Time expected = new java.sql.Time(
+                    java.sql.Timestamp.valueOf(LocalDateTime.of(1970, 1, 1, 3, 4, 5, 600000000)).getTime());
+            Assertions.assertEquals(expected, time);
+        }
+
+        @Test
+        @DisplayName("ナノ秒まで指定された日時文字列からjava.sql.Timeクラスに変換できること")
+        @Tag("normal")
+        void nanoSecondFormat() throws Exception {
+            java.sql.Time time = DateTimeUtils.toSqlTime("23:59:59.999999999");
+
+            java.sql.Time expected = new java.sql.Time(
+                    java.sql.Timestamp.valueOf(LocalDateTime.of(1970, 1, 1, 23, 59, 59, 999999999)).getTime());
+            Assertions.assertEquals(expected, time);
+        }
+
+        @Test
+        @DisplayName("秒以降が省略されたフォーマットの日時文字列からjava.sql.Timeクラスに変換できること")
+        @Tag("normal")
+        void minuteFormat() throws Exception {
+            java.sql.Time time = DateTimeUtils.toSqlTime("23:59");
+
+            java.sql.Time expected = new java.sql.Time(
+                    java.sql.Timestamp.valueOf(LocalDateTime.of(1970, 1, 1, 23, 59, 0, 0)).getTime());
+            Assertions.assertEquals(expected, time);
+        }
+
+        @Test
+        @DisplayName("分以降が省略されたフォーマットの日時文字列からjava.sql.Timeクラスに変換するとエラーが発生すること")
+        @Tag("error")
+        void hourFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toSqlTime("2020-12-31 23"));
+            Assertions.assertEquals(DateTimeParseException.class, e.getCause().getClass());
+        }
+
+        @Test
+        @DisplayName("日付部分のみのフォーマットの日時文字列からjava.sql.Timeクラスに変換するとエラーが発生すること")
+        @Tag("error")
+        void dateFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toSqlTime("2020-12-31"));
+            Assertions.assertEquals(DateTimeParseException.class, e.getCause().getClass());
+        }
+
+        @Test
+        @DisplayName("時間部分のみのフォーマットの日時文字列からjava.sql.Timeクラスに変換できること")
+        @Tag("normal")
+        void timeFormat() throws Exception {
+            java.sql.Time time = DateTimeUtils.toSqlTime("23:59:59.999");
+
+            java.sql.Time expected = new java.sql.Time(
+                    java.sql.Timestamp.valueOf(LocalDateTime.of(1970, 1, 1, 23, 59, 59, 999000000)).getTime());
+            Assertions.assertEquals(expected, time);
+        }
+
+        @Test
+        @DisplayName("nullからjava.sql.Timeクラスに変換するとエラーが発生すること")
+        @Tag("error")
+        void nullFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toSqlTime(null));
+            Assertions.assertEquals(NullPointerException.class, e.getCause().getClass());
+        }
+    }
+
+    @Nested
+    @DisplayName("java.sql.Timestamp toSqlTimestamp(String valueFrom)")
+    class toSqlTimestamp_String {
+
+        @Test
+        @DisplayName("日付と時間の日時文字列からjava.sql.Timestampクラスに変換できること")
+        @Tag("normal")
+        void dateTimeFormat() throws Exception {
+            java.sql.Timestamp timestamp = DateTimeUtils.toSqlTimestamp("2020-12-31 23:59:59.999");
+
+            java.sql.Timestamp expected = java.sql.Timestamp
+                    .valueOf(LocalDateTime.of(2020, 12, 31, 23, 59, 59, 999000000));
+            Assertions.assertEquals(expected, timestamp);
+        }
+
+        @Test
+        @DisplayName("0がトリムされたの日時文字列からjava.sql.Timestampクラスに変換できること")
+        @Tag("normal")
+        void zeroTrimFormat() throws Exception {
+            java.sql.Timestamp timestamp = DateTimeUtils.toSqlTimestamp("2020-1-2 3:4:5.6");
+
+            java.sql.Timestamp expected = java.sql.Timestamp.valueOf(LocalDateTime.of(2020, 1, 2, 3, 4, 5, 600000000));
+            Assertions.assertEquals(expected, timestamp);
+        }
+
+        @Test
+        @DisplayName("ナノ秒まで指定された日時文字列からjava.sql.Timestampクラスに変換できること")
+        @Tag("normal")
+        void nanoSecondFormat() throws Exception {
+            java.sql.Timestamp timestamp = DateTimeUtils.toSqlTimestamp("2020-12-31 23:59:59.999999999");
+
+            java.sql.Timestamp expected = java.sql.Timestamp
+                    .valueOf(LocalDateTime.of(2020, 12, 31, 23, 59, 59, 999999999));
+            Assertions.assertEquals(expected, timestamp);
+        }
+
+        @Test
+        @DisplayName("秒以降が省略されたフォーマットの日時文字列からjava.sql.Timestampクラスに変換できること")
+        @Tag("normal")
+        void minuteFormat() throws Exception {
+            java.sql.Timestamp timestamp = DateTimeUtils.toSqlTimestamp("2020-12-31 23:59");
+
+            java.sql.Timestamp expected = java.sql.Timestamp.valueOf(LocalDateTime.of(2020, 12, 31, 23, 59, 0, 0));
+            Assertions.assertEquals(expected, timestamp);
+        }
+
+        @Test
+        @DisplayName("分以降が省略されたフォーマットの日時文字列からjava.sql.Timestampクラスに変換するとエラーが発生すること")
+        @Tag("error")
+        void hourFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toSqlTimestamp("2020-12-31 23"));
+            Assertions.assertEquals(DateTimeParseException.class, e.getCause().getClass());
+        }
+
+        @Test
+        @DisplayName("日付部分のみのフォーマットの日時文字列からjava.sql.Timestampクラスに変換するとエラーが発生すること")
+        @Tag("error")
+        void dateFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toSqlTimestamp("2020-12-31"));
+            Assertions.assertEquals(DateTimeParseException.class, e.getCause().getClass());
+        }
+
+        @Test
+        @DisplayName("時間部分のみのフォーマットの日時文字列からjava.sql.Timestampクラスに変換するとエラーが発生すること")
+        @Tag("error")
+        void timeFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toSqlTimestamp("23:59:59.999"));
+            Assertions.assertEquals(DateTimeParseException.class, e.getCause().getClass());
+        }
+
+        @Test
+        @DisplayName("nullからjava.sql.Timestampクラスに変換するとエラーが発生すること")
+        @Tag("error")
+        void nullFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toSqlTimestamp(null));
+            Assertions.assertEquals(NullPointerException.class, e.getCause().getClass());
+        }
+    }
+
+    @Nested
+    @DisplayName("String toString(LocalTime valueFrom)")
+    class toString_LocalTime {
+
+        @Test
+        @DisplayName("LocalTimeクラスから0がトリムされたの日時文字列に変換できること")
+        @Tag("normal")
+        void zeroTrimFormat() throws Exception {
+            String actual = DateTimeUtils.toString(LocalTime.of(3, 4, 5, 600000000));
+
+            Assertions.assertEquals("3:4:5.6", actual);
+        }
+
+        @Test
+        @DisplayName("LocalTimeクラスからナノ秒まで指定された日時文字列に変換できること")
+        @Tag("normal")
+        void nanoSecondFormat() throws Exception {
+            String actual = DateTimeUtils.toString(LocalTime.of(23, 59, 59, 999999999));
+
+            Assertions.assertEquals("23:59:59.999999999", actual);
+        }
+
+        @Test
+        @DisplayName("LocalTimeクラスから秒以降が省略されたフォーマットの日時文字列に変換できること")
+        @Tag("normal")
+        void minuteFormat() throws Exception {
+            String actual = DateTimeUtils.toString(LocalTime.of(23, 59, 0, 0));
+
+            Assertions.assertEquals("23:59:0", actual);
+        }
+
+        @Test
+        @DisplayName("LocalTimeクラスから時間部分のみのフォーマットの日時文字列に変換できること")
+        @Tag("normal")
+        void timeFormat() throws Exception {
+            String actual = DateTimeUtils.toString(LocalTime.of(23, 59, 59, 999000000));
+
+            Assertions.assertEquals("23:59:59.999", actual);
+        }
+
+        @Test
+        @DisplayName("nullから日時文字列に変換するとエラーが発生すること")
+        @Tag("error")
+        void nullFormat() throws Exception {
+            IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> DateTimeUtils.toString(null));
             Assertions.assertEquals(NullPointerException.class, e.getCause().getClass());
         }
     }

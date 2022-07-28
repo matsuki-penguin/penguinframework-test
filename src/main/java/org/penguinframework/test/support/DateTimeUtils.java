@@ -136,4 +136,59 @@ public class DateTimeUtils {
 
         return Timestamp.valueOf(valueTo).toInstant();
     }
+
+    public static java.sql.Date toSqlDate(String valueFrom) {
+        if (valueFrom == null) {
+            throw new IllegalArgumentException(DateTimeUtils.STANDARD_DATE_FORMAT_ERROR, new NullPointerException());
+        }
+
+        LocalDate valueTo;
+        try {
+            valueTo = LocalDate.parse(valueFrom, DateTimeUtils.standardLocalDateFormatter);
+        } catch (final DateTimeParseException e) {
+            throw new IllegalArgumentException(DateTimeUtils.STANDARD_DATE_FORMAT_ERROR, e);
+        }
+
+        return java.sql.Date.valueOf(valueTo);
+    }
+
+    public static java.sql.Time toSqlTime(String valueFrom) {
+        if (valueFrom == null) {
+            throw new IllegalArgumentException(DateTimeUtils.STANDARD_TIME_FORMAT_ERROR, new NullPointerException());
+        }
+
+        LocalTime valueTo;
+        try {
+            valueTo = LocalTime.parse(valueFrom, DateTimeUtils.standardLocalTimeFormatter);
+        } catch (final DateTimeParseException e) {
+            throw new IllegalArgumentException(DateTimeUtils.STANDARD_TIME_FORMAT_ERROR, e);
+        }
+
+        // java.sql.Time.valueOfで変換するとミリ秒が切り捨てられるため、エポックミリ秒経由で変換
+        return new java.sql.Time(java.sql.Timestamp.valueOf(valueTo.atDate(LocalDate.of(1970, 1, 1))).getTime());
+    }
+
+    public static java.sql.Timestamp toSqlTimestamp(String valueFrom) {
+        if (valueFrom == null) {
+            throw new IllegalArgumentException(DateTimeUtils.STANDARD_DATE_TIME_FORMAT_ERROR,
+                    new NullPointerException());
+        }
+
+        LocalDateTime valueTo;
+        try {
+            valueTo = LocalDateTime.parse(valueFrom, DateTimeUtils.standardLocalDateTimeFormatter);
+        } catch (final DateTimeParseException e) {
+            throw new IllegalArgumentException(DateTimeUtils.STANDARD_DATE_TIME_FORMAT_ERROR, e);
+        }
+
+        return java.sql.Timestamp.valueOf(valueTo);
+    }
+
+    public static String toString(LocalTime valueFrom) {
+        if (valueFrom == null) {
+            throw new IllegalArgumentException("Argument value is null.", new NullPointerException());
+        }
+
+        return DateTimeUtils.standardLocalTimeFormatter.format(valueFrom);
+    }
 }

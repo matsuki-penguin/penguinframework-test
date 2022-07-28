@@ -7,27 +7,33 @@ import java.sql.SQLException;
 
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
+import org.penguinframework.test.database.annotation.DatabaseMeta;
 import org.penguinframework.test.dataset.csv.CsvDataSet;
 import org.penguinframework.test.dataset.excel.ExcelDataSet;
 import org.penguinframework.test.exception.AssertRuntimeException;
 import org.penguinframework.test.meta.CsvMeta;
 import org.penguinframework.test.meta.ExcelMeta;
 import org.penguinframework.test.meta.Meta;
+import org.penguinframework.test.support.DatabaseUtils;
 import org.penguinframework.test.type.FileType;
+import org.penguinframework.test.type.Platform;
 
 public class TableAssertion {
 
-    private final Connection connection;
-
     private final Class<?> testClass;
 
-    public TableAssertion(Connection connection, Class<?> testClass) {
+    private final IDatabaseConnection databaseConnection;
+
+    public TableAssertion(Connection connection, Class<?> testClass, DatabaseMeta databaseMeta)
+            throws DatabaseUnitException, SQLException {
         super();
-        this.connection = connection;
         this.testClass = testClass;
+        Platform platform = databaseMeta == null ? Platform.DEFAULT : databaseMeta.platform();
+        this.databaseConnection = DatabaseUtils.getDatabaseConnection(connection, connection.getSchema(), platform);
+
     }
 
     public void assertEquals(String expectedFilePath, String actualTableName) {
@@ -54,9 +60,7 @@ public class TableAssertion {
             }
             ITable expectedTable = expectedDataSet.getTable(actualTableName);
 
-            DatabaseConnection databaseConnection = new DatabaseConnection(this.connection,
-                    this.connection.getSchema());
-            IDataSet dataSet = databaseConnection.createDataSet();
+            IDataSet dataSet = this.databaseConnection.createDataSet();
             ITable actualTable = dataSet.getTable(actualTableName);
 
             Assertion.assertEquals(expectedTable, actualTable);

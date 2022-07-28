@@ -73,7 +73,11 @@ public class ExtDateDataType extends AbstractDataType {
 
     @Override
     public Object getSqlValue(int column, ResultSet resultSet) throws SQLException, TypeCastException {
-        return java.sql.Date.class.cast(DataType.DATE.getSqlValue(column, resultSet)).toLocalDate();
+        Object sqlValue = DataType.DATE.getSqlValue(column, resultSet);
+        if (sqlValue == null) {
+            return sqlValue;
+        }
+        return java.sql.Date.class.cast(sqlValue).toLocalDate();
     }
 
     @Override
