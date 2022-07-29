@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Microsoft Visio、SVG Export により生成 csv-basic.ja.svg ページ - 1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="6.97665in" height="1.86089in"
+		viewBox="0 0 502.319 133.984" xml:space="preserve" color-interpolation-filters="sRGB" class="st13">
+	<v:documentProperties v:langID="1041" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:none;stroke:#7f7f7f;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st3 {fill:none;stroke:#789440;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
+		.st4 {fill:none;stroke:#31859b;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
+		.st5 {fill:none;stroke:#923931;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
+		.st6 {marker-end:url(#mrkr4-20);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
+		.st7 {fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:0.37313432835821}
+		.st8 {fill:#ffffff}
+		.st9 {stroke:#789440;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
+		.st10 {fill:#000000;font-family:游ゴシック Medium;font-size:0.833336em}
+		.st11 {stroke:#31859b;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
+		.st12 {stroke:#923931;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
+		.st13 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<defs id="Markers">
+		<g id="lend4">
+			<path d="M 2 1 L 0 0 L 2 -1 L 2 1 " style="stroke:none"/>
+		</g>
+		<marker id="mrkr4-20" class="st7" v:arrowType="4" v:arrowSize="2" v:setback="5.12" refX="-5.12" orient="auto"
+				markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend4" transform="scale(-2.68,-2.68) "/>
+		</marker>
+	</defs>
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>ページ - 1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="コネクタ" v:index="0"/>
+		<v:layer v:name="引き出し" v:index="1"/>
+		<g id="shape13-1" v:mID="13" v:groupContext="shape" transform="translate(89.4027,-53.6187)">
+			<title>シート.13</title>
+			<rect v:rectContext="foreign" x="0" y="53.9937" width="189.976" height="79.99" class="st1"/>
+			<image x="0" y="53.9937" width="189.976" height="79.99" preserveAspectRatio="none" xlink:href="data:image/png;base64,
+						iVBORw0KGgoAAAANSUhEUgAAAL4AAABQCAIAAAAoWFg4AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxEAAAsR
+						AX9kX5EAAAXvSURBVHhe7ZXRliQpCET7//+435Y0LIYBQSWt6uxZ7kMthAFiNmf267soUtTqFElqdYoktTpFklqdIkmtTpGkVqdIUqtT
+						JKnVKZLU6hRJanWKJLU6RZJanSJJrU6RpFanSFKrUySp1SmSvHF1vr6euJfvnmq9/zO/zzr56acv/6WrszW2Na+XP/P7rJOf/uzf4GOc
+						Hdua18uf+X3WeeP0z/w0Z6eq1XkLtTox/9/VGb6cRIAY4hD2AIigS40uCT9+ETBQiJ77wAMzAVESiK3iQsaguS4QQyQgMl19eZRIQCFk
+						DKzys+Snid9GsTVIlIFjKRJSRywVFRAyHkKG2G8VohWN9R69UM4gRipFglOlE1b5WfLTeG9m4qcu+ln0AltlFcnUPyz3ek67EVBWnIQU
+						vfgh5AdSj7Fvi18b+ylmWBkGl8MAwxB7qpRhuddz2o2AEjspZrpkDD16DPmB1GPs2+LXBn55ZEUVSPMK1q+UYUPvlmk3AkrglEfK5tU+
+						gfxMw0dKpEKxMqiUgOLZvED5FXSqDNY/NRBDkZh2I6As6sPU1j6B/Ez2PVKhOEgJlRJQpH7VvNKVAMiUYnsqFXVKWIUYisRKOSvyiGKk
+						Q1FilYeQH2v4pPb2C8QQQZwSrFAAOEbQDgcBcZledOmFUpA24wVEyboIWps/p9apTgHioYgAyPhpfGiyn/oET/70MdcGPXv43/plix+n
+						VqdIklydX/DP6dHxvPd6OrHr9zjSJ/Bv9ZFkyviy9K1T7needli/wntvoIOev2DFHg1pPS56/oIVezTE81MKer7Jdpm6KX1xzP220w6L
+						V3jv9XQmNli/x80+U/+0g8d22e7oOe63PTWY915PZ2KD9Xvc7DP1Tzt4JMuY9MUx99u+ezDV314XD7A+3qk+YHfOgGQZWLkVHv5FAJCC
+						Lv0tEl1tdOkFiwgYKEr3bFvIkjv9t64+1YcY+nebMMkysHIreWBjs0pBnBKesqJbDzEUY4KetlvQ39ZKuvrCKow6atV/6GrDKoynT0mW
+						EYtXss0GEiVaz7CK8JysrxfGKH+cEm+6l9ntQwxLEn1Atmz5PnbagKCY6VJDpcDaCE+Rv0OCI4t3CzM1gK1Lwak+YHHOFY5N4MHOICBU
+						Q5VK6AhwioCB0iw9aLLG04dYs1KmBrB1KbjZRzltYWIkkCkLLqMjdcqpCjwbUOmQYR/C6sNunmh1z9mjxkrVsM+Um32U+dRUxHZZfBOd
+						KgOnKpA2imVKqJQIFHlEMVIpEiolrEJcxbNCho+GnvU+Mff7cMmwNj9Y/+8ydJOiH7xQCqfDAHAMHXgK09VGl16t+FeiFGsA1qboBw2r
+						MEOnpB/MUE7USvpBSOBc7GBJlnmk53gIv33+T1JfqkhSq1MkSa7O9X/Of/Hfdu9dp3SPU35PfweZa3i4j035Gbx3ndI9Tvl3+9xk+w5v
+						3N/O4p8hrXuc8u/2uc/2BZ8f8TN47zqle5zy7/a5z90LPjDij7D7J9n1e6T9N+9NcOuClfngoV8Akemq0BFDJCASiCESEJmuLvtjpF/V
+						Dlvt+j22zMSpe3MkL6DJFodTzml8uXd0YhhfbsczJSgc9ln0UyzpqkCJsDFdFSiR02Yf+M9y64KV+awHyk/pU5QtToldv8e6Ewz9JEIf
+						np7l7gXTEa2B32bhU8lUt/CpxCqWaVWcElPDkEUbM/XvNkywfcHup7EGKF7huj/XJ2ZaFafE1DBk0cacuvcO2xfEI1IaKxxLUWJ1KPQr
+						jziWosTqqjw2MEqU6a7fY8UjOXXvTTIX8Fh2PlKUiBQ6AREMUyUSUqdf0E46w1SJhFQoVgaVSvhIenb9Hiseyal775O8g4bz5lO6ZwOt
+						TYcVBAwUq0uu+hesIGCUYlNFP2h4iqQfNKziAaekHzh0k6AfNKzyPg5fY+c+9ZKzX+Rj3/cfpr5gkaRWp0hSq1MkqdUpktTqFElqdYok
+						tTpFklqdIkmtTpGkVqdIUqtTJKnVKZLU6hRJanWKJLU6RZJanSJJrU6R4vv7P2OOM3C6MjZ3AAAAAElFTkSuQmCC"/>
+			<rect v:rectContext="foreign" x="0" y="53.9937" width="189.976" height="79.99" class="st2"/>
+		</g>
+		<g id="shape10-5" v:mID="10" v:groupContext="shape" transform="translate(0.375,-5.5137)">
+			<title>シート.10</title>
+			<rect v:rectContext="foreign" x="0" y="48.4945" width="77.2404" height="85.4892" class="st1"/>
+			<image x="0" y="48.4945" width="77.2404" height="85.4892" preserveAspectRatio="none" xlink:href="data:image/png;base64,
+						iVBORw0KGgoAAAANSUhEUgAAAGcAAAByCAIAAADBOFiGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxEAAAsR
+						AX9kX5EAAAXSSURBVHhe7Z3PixxVEMf3T/A/8D/w4m1BxLN6V7zqHLwFRA2Yg+AhisFRojmJQnBRSfQgu3hQT5uYEAmKJgizElzBX5EY
+						E2HBy/rtetWVN9UzPT21/brf9NSHIk6/rp50faj3XveguHHoLI9bs+DWLLg1C27Ngluz4NYsuDULR7L25hunjr/wXO9x/tzHfENdcSRr
+						uOP/+qYXcUOwdvnypY7FDcEa/uxY3ECsgS7FDcca6EzcoKyBbsQNzRroQNwArYHU4oZpDSQVN1hrIJ24IVsDicQN3BpIIW741kDr4tbC
+						GmhX3LpYAy2KWyNroC1xK2/tow+3cBvLBhdgZeWtGXBrFtyaheTWbh/cfXH79H0vPdJlPP/ZWzfv3OISE5DcWvfKQkAcl5iA5NZUMV0G
+						l5iAIVv76c9fuMq28V6z4NYsuDULbs2CW7PQv7Xt67u7N76V2Lr6uUqQUJkPvf2MSlDBJSagf2vPnn+VU0see/eYykGoNFhTCdXgEhOQ
+						xQyFAs4mqkbuf+Xxfw7+5dPEwkZDcIlz+PnuzUt/7SFuHdzhocZkYQ0KOLtEtdvJr97nEwQO47PzgkuMgKCz+xeOXdt6cPflOJ64euaL
+						P37gpAbkshucuXiOLyDidlONtv/37xiRszXBJZbAy8Nfn1S+4nhtb4dTF5GLteoclHbD/sBDxFMfnJCr6oNLLHnnxpciCO2GQwRMxSox
+						YTm7llysIWau9w+8/iQfE002AQkusQSOIAh/qoUMC5yIg00erSUjawi1LaDd4kZDM0KiuqQmuMQS9NG127Pf5z/99ZtgDfp4qJa8rKlt
+						4fvf9vgT0XATkOASG4B2C9YQPFRLXtYQahUTsAmozIXBJS4iPIKstrXqthCY+ehbH1ziNFjUMB+xuj393Xt44BBZEpxXS3bWENV2w1RV
+						OU2CSyyBL+yYylE1OLuW7KxhvZ/Za9hhVebC4BIJKFOd9eiVMdoNHtF3Kz9D1TYqQGXDh1sJLpGAmiBl5sMHWGFrx3dO82WEmqo4VPn1
+						wSUS8kSGRY2HpllVa9U3JwxWn+DiS+qDSyRESrXLAF62JIGHasnI2vb1Xb6GCG9O0MTHxFLbApdIiJSZ70xY4CSBh2rJxRoc8QVE/Oak
+						5mnzZ10ukRApEMRDJbLkheBRQnoQWwcPEVlYq3l1R6hXUWQ2fK/iEom4m/CyeXb/ApoOUsK4rHoIvoCQJxX1c0gW1lQ3YarWJzR8h+cS
+						CbyBxmpUyHsogi8g5GFFvcD2b02tXKDaStWHuCa/F3GJJagcE03shIDK8HukjIRkgH0jjKjpCXq2hrmJvZJTiXmPF+rn3Ca/TXKJ08AR
+						FrIQwdc8ZFFT0xP0bA0tg+kWxzwXGFeZC9uNS7Qiu0T196Us1rVEwSVaCRtFdXoCtzaX0GgnfvyEjyPc2mzkfX7m2ufWLLg1C27Ngluz
+						kNya/zvgM1lgra//3oDrS0Nya/Xgr+cbWSncmgW3ZsGtWXBrFtyaBbdmwa1ZcGsW3JoFt2bBrVlwaxbcmgW3ZsGtWXBrFtyaBbdmoWdr
+						mfxfIZYN3DYXYOVI1tYWt2bBrVlwaxbcmgW3ZsGtWXBrFtyaBbdmIRNrO6PNwGgnHG6ED5mShbXJeHNzPOGDArfWgIqk9bJWVDseF7Nt
+						Y2OjbJ8wiBEamNDpIgGzsUjA5EQyDnm0SIqsydzlyRtRflV5qjimryoujsVXevmotG5N7hW3Gj4Xg3zTYYzvH+M8LBWW5ZUDcbmSxECn
+						fBWhEu4dti4tQa/JjWsFYLowqUaG9SX4Z+jBwCiqHdKUCVyM/h2LyfJLMB79pa3QtbW41EbW5hQs104zmdCMDheFq6kn6WR7tG5NbrH4
+						PO2EasVnLraoLxQuGdraVD4h31qkTp8qCRfxp9Go0pMt0H6v4TaBLPaRE4J6ISCjc61hBPnlLB1jSKwBOoVzPHFxKnDviwuBCaSlnKED
+						xq1ZcGsW2rW2Lri15Tk8/B/UVeSx+LlawgAAAABJRU5ErkJggg=="/>
+			<rect v:rectContext="foreign" x="0" y="48.4945" width="77.2404" height="85.4892" class="st1"/>
+		</g>
+		<g id="shape2-9" v:mID="2" v:groupContext="shape" transform="translate(98.9312,-102.233)">
+			<title>角丸長方形</title>
+			<v:userDefs>
+				<v:ud v:nameU="CTypeTopLeftSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CTypeTopRightSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CTypeBotLeftSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CTypeBotRightSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CornerLockHoriz" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="CornerLockVert" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="CornerLockDiag" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="TopLeftOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="TopRightOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="BotLeftOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="BotRightOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_M.vssx)"/>
+				<v:ud v:nameU="TopLeftOffset" v:prompt="" v:val="VT0(0.064001574545587):1"/>
+				<v:ud v:nameU="TopRightOffset" v:prompt="" v:val="VT0(0.064001574545587):1"/>
+				<v:ud v:nameU="BotLeftOffset" v:prompt="" v:val="VT0(0.064001574545587):1"/>
+				<v:ud v:nameU="BotRightOffset" v:prompt="" v:val="VT0(0.064001574545587):1"/>
+			</v:userDefs>
+			<path d="M4.61 133.98 L163.4 133.98 A4.60804 4.60804 -180 0 0 168.01 129.38 L168.01 122.66 A4.60804 4.60804 -180 0 0
+						 163.4 118.06 L4.61 118.06 A4.60804 4.60804 -180 0 0 0 122.66 L0 129.38 A4.60804 4.60804 -180 0 0 4.61 133.98
+						 Z" class="st3"/>
+		</g>
+		<g id="shape3-11" v:mID="3" v:groupContext="shape" transform="translate(98.9312,-69.6875)">
+			<title>角丸長方形.3</title>
+			<v:userDefs>
+				<v:ud v:nameU="CTypeTopLeftSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CTypeTopRightSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CTypeBotLeftSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CTypeBotRightSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CornerLockHoriz" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="CornerLockVert" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="CornerLockDiag" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="TopLeftOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="TopRightOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="BotLeftOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="BotRightOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_M.vssx)"/>
+				<v:ud v:nameU="TopLeftOffset" v:prompt="" v:val="VT0(0.064001574545587):1"/>
+				<v:ud v:nameU="TopRightOffset" v:prompt="" v:val="VT0(0.064001574545587):1"/>
+				<v:ud v:nameU="BotLeftOffset" v:prompt="" v:val="VT0(0.064001574545587):1"/>
+				<v:ud v:nameU="BotRightOffset" v:prompt="" v:val="VT0(0.064001574545587):1"/>
+			</v:userDefs>
+			<path d="M4.61 133.98 L163.4 133.98 A4.60804 4.60804 -180 0 0 168.01 129.38 L168.01 107.75 A4.60804 4.60804 -180 0 0
+						 163.4 103.14 L4.61 103.14 A4.60804 4.60804 -180 0 0 0 107.75 L0 129.38 A4.60804 4.60804 -180 0 0 4.61 133.98
+						 Z" class="st4"/>
+		</g>
+		<g id="shape4-13" v:mID="4" v:groupContext="shape" transform="translate(12.9072,-2.63946)">
+			<title>角丸長方形.4</title>
+			<v:userDefs>
+				<v:ud v:nameU="CTypeTopLeftSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CTypeTopRightSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CTypeBotLeftSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CTypeBotRightSnip" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CornerLockHoriz" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="CornerLockVert" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="CornerLockDiag" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="TopLeftOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="TopRightOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="BotLeftOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="BotRightOffset" v:prompt="" v:val="VT0(0.15748031496063):24"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_M.vssx)"/>
+				<v:ud v:nameU="TopLeftOffset" v:prompt="" v:val="VT0(0.064632547841097):1"/>
+				<v:ud v:nameU="TopRightOffset" v:prompt="" v:val="VT0(0.064632547841097):1"/>
+				<v:ud v:nameU="BotLeftOffset" v:prompt="" v:val="VT0(0.064632547841097):1"/>
+				<v:ud v:nameU="BotRightOffset" v:prompt="" v:val="VT0(0.064632547841097):1"/>
+			</v:userDefs>
+			<path d="M4.65 133.98 L47.3 133.98 A4.65347 4.65347 -180 0 0 51.96 129.33 L51.96 119.74 A4.65347 4.65347 -180 0 0 47.3
+						 115.09 L4.65 115.09 A4.65347 4.65347 -180 0 0 -0 119.74 L0 129.33 A4.65347 4.65347 -180 0 0 4.65 133.98
+						 Z" class="st5"/>
+		</g>
+		<g id="shape12-15" v:mID="12" v:groupContext="shape" v:layerMember="0" transform="translate(38.9952,-91.0029)">
+			<title>動的コネクタ</title>
+			<path d="M0 133.98 C0 127.55 -0 118.69 7.95 113.9 C15.53 109.34 30.32 108.45 42.37 108.28 L42.73 108.28" class="st6"/>
+		</g>
+		<g id="shape6-21" v:mID="6" v:groupContext="shape" v:layerMember="1" transform="translate(293.223,-98.8578)">
+			<title>塗りつぶし</title>
+			<desc>テーブルの列名、JavaBeanのフィールド名</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Callout)"/>
+				<v:ud v:nameU="msvSDTargetIntersection" v:prompt=""/>
+				<v:ud v:nameU="msvSDCalloutNoHighlight" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="Side" v:prompt="" v:val="VT0(4):26"/>
+				<v:ud v:nameU="LeaderEnd" v:prompt="" v:val="VT7(PNT(6.25MM,-6.4MM)):40"/>
+				<v:ud v:nameU="WHBoxIntersection" v:prompt="" v:val="VT7(PNT(10.096153846154MM,0MM)):40"/>
+				<v:ud v:nameU="Embellishment" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="BackFillColor" v:prompt="" v:val="VT5(#96afcf)"/>
+				<v:ud v:nameU="BackLineColor" v:prompt="" v:val="VT5(#1f477d)"/>
+				<v:ud v:nameU="DarkerColor" v:prompt="" v:val="VT5(#1f477d)"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(SDCALL_M.vssx)"/>
+				<v:ud v:nameU="msvSDTargetIntersection" v:prompt="" v:val="VT7(PNT(-0.36499452200698,0.15748031496063)):40"/>
+				<v:ud v:nameU="Side" v:prompt="" v:val="VT0(3):26"/>
+				<v:ud v:nameU="LeaderEnd" v:prompt="" v:val="VT7(PNT(-0.36499452200698,0.15748031496063)):40"/>
+				<v:ud v:nameU="WHBoxIntersection" v:prompt="" v:val="VT7(PNT(0,4MM)):40"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="104.173" cy="122.645" width="208.35" height="20.0036"/>
+			<path d="M0 133.98 L208.35 133.98 L208.35 111.31 L0 111.31 L0 133.98 Z" class="st8"/>
+			<path d="M0 122.65 L-26.28 122.65" class="st9"/>
+			<path d="M0 133.98 L208.35 133.98 L208.35 111.31 L0 111.31 L0 133.98" class="st9"/>
+			<text x="4" y="125.65" class="st10" v:langID="1041"><v:paragraph/><v:tabList/>テーブルの列名、JavaBeanのフィールド名</text>		</g>
+		<g id="shape7-26" v:mID="7" v:groupContext="shape" v:layerMember="1" transform="translate(293.223,-73.7711)">
+			<title>塗りつぶし.7</title>
+			<desc>テーブルの列値、JavaBeanのフィールド値</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Callout)"/>
+				<v:ud v:nameU="msvSDTargetIntersection" v:prompt=""/>
+				<v:ud v:nameU="msvSDCalloutNoHighlight" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="Side" v:prompt="" v:val="VT0(4):26"/>
+				<v:ud v:nameU="LeaderEnd" v:prompt="" v:val="VT7(PNT(6.25MM,-6.4MM)):40"/>
+				<v:ud v:nameU="WHBoxIntersection" v:prompt="" v:val="VT7(PNT(10.096153846154MM,0MM)):40"/>
+				<v:ud v:nameU="Embellishment" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="BackFillColor" v:prompt="" v:val="VT5(#96afcf)"/>
+				<v:ud v:nameU="BackLineColor" v:prompt="" v:val="VT5(#1f477d)"/>
+				<v:ud v:nameU="DarkerColor" v:prompt="" v:val="VT5(#1f477d)"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(SDCALL_M.vssx)"/>
+				<v:ud v:nameU="msvSDTargetIntersection" v:prompt="" v:val="VT7(PNT(-0.36499452200698,0.15748031496063)):40"/>
+				<v:ud v:nameU="Side" v:prompt="" v:val="VT0(3):26"/>
+				<v:ud v:nameU="LeaderEnd" v:prompt="" v:val="VT7(PNT(-0.36499452200698,0.15748031496063)):40"/>
+				<v:ud v:nameU="WHBoxIntersection" v:prompt="" v:val="VT7(PNT(0,4MM)):40"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="104.173" cy="122.645" width="208.35" height="20.0036"/>
+			<path d="M0 133.98 L208.35 133.98 L208.35 111.31 L0 111.31 L0 133.98 Z" class="st8"/>
+			<path d="M0 122.65 L-26.28 122.65" class="st11"/>
+			<path d="M0 133.98 L208.35 133.98 L208.35 111.31 L0 111.31 L0 133.98" class="st11"/>
+			<text x="4" y="125.65" class="st10" v:langID="1041"><v:paragraph/><v:tabList/>テーブルの列値、JavaBeanのフィールド値</text>		</g>
+		<g id="shape8-31" v:mID="8" v:groupContext="shape" v:layerMember="1" transform="translate(113.313,-0.75)">
+			<title>塗りつぶし.8</title>
+			<desc>テーブル名</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Callout)"/>
+				<v:ud v:nameU="msvSDTargetIntersection" v:prompt=""/>
+				<v:ud v:nameU="msvSDCalloutNoHighlight" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="Side" v:prompt="" v:val="VT0(4):26"/>
+				<v:ud v:nameU="LeaderEnd" v:prompt="" v:val="VT7(PNT(6.25MM,-6.4MM)):40"/>
+				<v:ud v:nameU="WHBoxIntersection" v:prompt="" v:val="VT7(PNT(10.096153846154MM,0MM)):40"/>
+				<v:ud v:nameU="Embellishment" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="BackFillColor" v:prompt="" v:val="VT5(#96afcf)"/>
+				<v:ud v:nameU="BackLineColor" v:prompt="" v:val="VT5(#1f477d)"/>
+				<v:ud v:nameU="DarkerColor" v:prompt="" v:val="VT5(#1f477d)"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(SDCALL_M.vssx)"/>
+				<v:ud v:nameU="msvSDTargetIntersection" v:prompt="" v:val="VT7(PNT(-0.67290129403023,0.15748031496063)):40"/>
+				<v:ud v:nameU="Side" v:prompt="" v:val="VT0(3):26"/>
+				<v:ud v:nameU="LeaderEnd" v:prompt="" v:val="VT7(PNT(-0.67290129403023,0.15748031496063)):40"/>
+				<v:ud v:nameU="WHBoxIntersection" v:prompt="" v:val="VT7(PNT(0,4MM)):40"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="32.5984" cy="122.645" width="65.2" height="20.0036"/>
+			<path d="M0 133.98 L65.2 133.98 L65.2 111.31 L0 111.31 L0 133.98 Z" class="st8"/>
+			<path d="M0 122.65 L-48.45 122.65" class="st12"/>
+			<path d="M0 133.98 L65.2 133.98 L65.2 111.31 L0 111.31 L0 133.98" class="st12"/>
+			<text x="4" y="125.65" class="st10" v:langID="1041"><v:paragraph/><v:tabList/>テーブル名</text>		</g>
+	</g>
+</svg>
