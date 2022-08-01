@@ -1,3 +1,4 @@
 = 目次
 
 * link:parameter-file.ja.adoc[パラメータファイル]
+* link:init-database.ja.adoc[データベースの初期化]

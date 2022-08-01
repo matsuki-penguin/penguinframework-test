@@ -1,0 +1,195 @@
+= データベースの初期化
+
+パラメータファイルをもとにデータベースにテストデータを投入することができます。 +
+テストデータの投入、テスト中のデータベースアクセスはトランザクション管理され、テスト完了時にロールバックされるので、テスト完了後、データベースはテスト実行前の状態に戻ります。 +
+また、テストメソッド実行後はデータベースのロールバック後にテストデータが再投入されるため、テストメソッド内でテストデータを更新しても、次のテストメソッドでは更新されていないテストデータで実行されます。
+
+.テストの流れ
+image::figure/test-flow.ja.svg[テストの流れ]
+
+テストデータの投入量はパフォーマンスに影響するので、基本的に入れ替えの必要がないマスタデータは事前にデータベースに投入しておき、データパターンを変更する必要のあるトランザクションデータを本機能で投入する方法をおすすめします。
+
+== 基本的な記載方法
+
+``TableValueSource``アノテーションをクラスやメソッドに指定することで、テストメソッド実行時にデータベースにテストデータを投入されます。
+
+.データベースの初期化
+[source, java]
+----
+@TableValueSource("prepare_class_data.xlsx")                <1>
+class testClass {
+
+    @Test
+    @TableValueSource(path = "prepare_method_data.xlsx")    <2>
+    void testMethod() {
+        ・
+        ・
+        ・
+    }
+}
+----
+
+<1> クラス単位の初期化で使用するパラメータファイルのファイルパスを指定した``TableValueSource``アノテーションをクラスに指定します。 +
+<2> メソッド単位の初期化で使用するパラメータファイルのファイルパスを指定した``TableValueSource``アノテーションをメソッドに指定します。ファイルパスを指定する属性を明示する場合、path属性を使用します。
+
+データベースの初期化は、クラスに指定された``TableValueSource``アノテーションに指定されたパラメータファイルによる初期化後、メソッドに指定された``TableValueSource``アノテーションに指定されたパラメータファイルによる初期が実行されます。 +
+クラスに指定する初期化用パラメータファイルにはテストクラスで共通のテストデータを記載し、メソッドに指定する初期化用パラメータにはテストメソッド固有のテストデータを記載することで、パラメータファイルを共通化できます。 +
+パラメータファイルの記載方法はlink:parameter-file.ja.adoc[パラメータファイル]を参照してください。
+
+== パラメータファイルのオプション
+
+パラメータファイルのオプションは、TableValueSourceアノテーションの属性で指定します。
+
+=== データ投入方法のオプション
+
+デフォルトではテーブルのすべてのレコードをdelete後、パラメータファイルの内容がinsertされます。 +
+データの投入方法は、TableValueSourceアノテーションのoperation属性で変更することができます。
+
+----
+@TableValueSource(path = "prepare_class_data.xlsx", operation = OperationType.INSERT    <1>
+class testClass {
+----
+
+<1> operation属性にOperationType列挙でデータの投入方法を指定します。
+
+.OperationType列挙
+[options="header"]
+|===
+|OperationType列挙 |動作
+|CLEAN_INSERT |対象テーブルのすべてのレコードをdelete後、パラメータファイルの内容をinsert
+|INSERT |対象テーブルにパラメータファイルの内容をinsert
+|===
+
+=== Excel形式のオプション
+
+Excel形式のオプションは、TableValueSourceアノテーションのexcelMeta属性にTableExcelMetaアノテーションを指定し、そのTableExcelMetaアノテーションの属性で指定します。
+
+.Excel形式のオプション
+[source, java]
+----
+@TableValueSource(path = "prepare_class_data.xlsx", excelMeta = @TableExcelMeta(...))    <1>
+class testClass {
+----
+
+<1> excelMeta属性にTableExcelMetaアノテーションを指定し、TableExcelMetaアノテーションの属性でExcel形式のオプションを指定します。
+
+==== シート名とテーブル名のマッピング
+
+デフォルトではシート名が初期化対象のテーブル名になります。 +
+テーブル名とは異なる任意のシート名を使用する場合や、シート名の長さの制限である31文字を超えるテーブル名のテーブルを初期化する場合、シート名とテーブル名のマッピングを定義することができます。
+
+.シート名とテーブル名のマッピング
+[source, java]
+----
+@TableValueSource(path = "prepare_class_data.xlsx",
+                  excelMeta = @TableExcelMeta(
+                      sheetMapping = @SheetMapping(sheet = "sheet1", table = "EMP_TABLE")))    <1>
+class testClass {
+
+    @Test
+    @TableValueSource(path = "prepare_method_data.xlsx",
+                      excelMeta = @TableExcelMeta(
+                          sheetMapping = {
+                              @SheetMapping(sheet = "sheet1", table = "EMP_TABLE"),
+                              @SheetMapping(sheet = "sheet2", table = "DEPT_TABLE") }))        <2>
+    void testMethod() {
+        ・
+        ・
+        ・
+    }
+}
+----
+
+<1> TableExcelMetaアノテーションのsheetMapping属性にシート名とテーブル名のマッピングを指定します。sheetMapping属性にSheetMappingアノテーションを指定し、そのSheetMappingアノテーションのsheet属性にシート名を、table属性にテーブル名を文字列で指定することで、シート名とテーブル名がマッピングされます。 +
+<2> シート名とテーブル名のマッピングを複数定義する場合、sheetMapping属性にSheetMappingアノテーションの配列を指定します。
+
+=== CSV形式のオプション
+
+CSV形式のオプションは、TableValueSourceアノテーションのcsvMeta属性にTableCsvMetaアノテーションを指定し、そのTableCsvMetaアノテーションの属性で指定します。
+
+.CSV形式のオプション
+[source, java]
+----
+@TableValueSource(path = "prepare_class_data.xlsx", csvMeta = @TableCsvMeta(...))    <1>
+class testClass {
+----
+
+<1> csvMeta属性にTableCsvMetaアノテーションを指定し、TableCsvMetaアノテーションの属性でCSV形式のオプションを指定します。
+
+==== 対象テーブル名
+
+デフォルトではファイル名が初期化対象のテーブル名になります。 +
+テーブル名とは異なる任意のファイル名を使用する場合、対象テーブル名を指定することができます。
+
+.対象テーブル名
+[source, java]
+----
+@TableValueSource(path = "prepare_class_data.csv",
+                  csvMeta = @TableCsvMeta(table = "EMP_TABLE"))    <1>
+class testClass {
+----
+
+<1> TableCsvMetaアノテーションのtable属性に初期化対象のテーブル名を文字列で指定します。
+
+==== 文字コード
+
+デフォルトではCSV形式のパラメータファイルは文字コードがUTF-8として読み込まれます。 +
+UTF-8以外の文字コードで作成されたCSV形式のパラメータファイルは、文字コードを指定することで読み込むことができます。
+
+.対象テーブル名
+[source, java]
+----
+@TableValueSource(path = "prepare_class_data.csv",
+                  csvMeta = @TableCsvMeta(encoding = "MS932"))    <1>
+class testClass {
+----
+
+<1> TableCsvMetaアノテーションのencoding属性にパラメータファイルの文字コードを指定します。
+
+==== 形式
+
+デフォルトではCSV形式のパラメータファイルはRFC4180で定義されたCSV形式(ただし、空行を使用できます)として読み込まれます。 +
+他の形式で作成されたCSV形式のパラメータファイルは、形式を指定することで読み込むことができます。
+
+.対象テーブル名
+[source, java]
+----
+@TableValueSource(path = "prepare_class_data.csv",
+                  csvMeta = @TableCsvMeta(format = CsvFormatType.EXCEL))    <1>
+class testClass {
+----
+
+<1> TableCsvMetaアノテーションのformat属性にパラメータファイルの形式をCsvFormatType列挙で指定します。
+
+.CsvFormatType列挙
+[options="header"]
+|===
+|CsvFormatType列挙|形式|区切り文字|囲い文字|エスケープ文字|空行の扱い|NULLに変換される文字列|ヘッダが足りない場合|値の前後のスペース
+|DEFAULT |RFC4180で定義されている形式(ただし、空行を使用できます) |`,`|`"`|なし|無視される||エラー|トリムしない
+|EXCEL |Excelファイル形式 |`,`|`"`|なし|空のレコード||無視|トリムしない
+|INFORMIX_UNLOAD |InformixのUNLOADで使用されるCSVアンロード形式 |`\|`|`"`|`\`|無視される||エラー|トリムしない
+|INFORMIX_UNLOAD_CSV |InformixのUNLOADで使用されるCSVアンロード形式(エスケープなし) |`,`|`"`|なし|無視される||エラー|トリムしない
+|MONGODB_CSV |MongoDBのmongoexportで使用されるCSV形式 |`,`|`"`|`"`|無視される||エラー|トリムしない
+|MONGODB_TSV |MongoDBのmongoexportで使用されるTSV形式|TAB|`"`|`"`|無視される||エラー|トリムしない
+|MYSQL |MySQLの「SELECT INTO OUTFILELOAD」で使用される形式|TAB|なし|`\`|空のレコード|\N|エラー|トリムしない
+|ORACLE |OracleのSQL*Loaderユーティリティで使用される形式|`,`|`"`|`\`|空のレコード|\N|エラー|トリムしない
+|POSTGRESQL_CSV |PostgreSQLのCOPYで使用されるCSV形式|`,`|`"`|`"`|空のレコード|空文字列|エラー|トリムしない
+|POSTGRESQL_TEXT |PostgreSQLのCOPYで使用されるテキスト形式|TAB|`"`|`\`|空のレコード|\N|エラー|トリムしない
+|RFC4180 |RFC4180で定義されている形式|`,`|`"`|なし|空のレコード||エラー|トリムしない
+|TDF |タブ区切り形式|TAB|`"`|なし|無視される||エラー|トリムする
+|===
+
+==== NULLをあらわす文字列
+
+デフォルトではCSV形式のパラメータファイルの項目値が「``null``」の項目は値をnullとして読み込まれます。 +
+値をnullとして扱う文字列を指定してパラメータファイルを読み込むことができます。
+
+.対象テーブル名
+[source, java]
+----
+@TableValueSource(path = "prepare_class_data.csv",
+                  csvMeta = @TableCsvMeta(nullString = "NullValue"))    <1>
+class testClass {
+----
+
+<1> TableCsvMetaアノテーションのnullString属性に値をnullとして扱う文字列を指定します。
