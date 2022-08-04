@@ -124,7 +124,7 @@ this.tableAssertion.assertEquals("expected_profile.csv",
 
 <1> ``CsvMeta``クラスの``format``メソッドにパラメータファイルの形式をCsvFormatType列挙で指定します。
 
-CsvFormatType列挙については、link:appendix.ja.adoc#_csvformattype[CsvFormatType列挙]を参照してください。
+CsvFormatType列挙については、link:appendix.ja.adoc#csvformattype列挙[CsvFormatType列挙]を参照してください。
 
 ==== NULLをあらわす文字列
 
