@@ -1,0 +1,141 @@
+= データベースの検証
+
+データベースとパラメータファイルの内容を比較します。 +
+データベースを更新するテストを実行後、データベースと期待値を記載したパラメータファイルを比較することで、テスト対象の処理の正当性を検証することができます。
+
+== 基本的な記載方法
+
+``TableAssertion``クラスのインスタンス変数、引数を宣言し、``Load``アノテーションを指定します。``Load``アノテーションを指定することで、自動的に変数に``TableAssertion``クラスのインスタンスが設定されます。  +
+``TableAssertion``インスタンスの検証メソッドを使用して、データベースをパラメータファイルの内容を比較します。
+
+``TableAssertion``インスタンスの``assertEquals``メソッドで、期待値となるパラメータファイルと、実際のデータベースの内容が比較されます。 +
+``assertEquals``メソッドの第1引数には期待値となるパラメータファイル、第2引数には比較を実行するテーブル名を指定します。
+
+.データベースの検証
+[source, java]
+----
+class testClass {
+
+    @Autowired
+    private ProfileDao profileDao;
+
+    @Load
+    private TableAssertion tableAssertion;                                       <1>
+
+    @Test
+    void testMethod() {
+        ProfileEntity profile = new ProfileEntity();
+        profile.setId(2L);
+        profile.setName("insert");
+        profile.setBirthday(LocalDate.of(2010, 7, 7));
+        this.profileDao.insert(profile);
+
+        this.tableAssertion.assertEquals("expected_profile.xlsx", "PROFILE");    <2>
+    }
+
+    @Test
+    void testMethod(@Load TableAssertion assertion) {                            <3>
+        ProfileEntity profile = new ProfileEntity();
+        profile.setId(2L);
+        profile.setName("insert");
+        profile.setBirthday(LocalDate.of(2010, 7, 7));
+        this.profileDao.insert(profile);
+
+        assertion.assertEquals("expected_profile.xlsx", "PROFILE");
+    }
+}
+----
+
+<1> TableAssertionクラスのインスタンス変数を宣言に``Load``アノテーションを指定することで、自動的に変数に``TableAssertion``クラスのインスタンスが設定されます。
+<2> ``TableAssertion``クラスのインスタンスを使用して、期待値となるパラメータファイルと、実際のデータベースの内容を比較します。
+<3> ``TableAssertion``クラスの変数は引数として宣言することも可能です。
+
+== パラメータファイルのオプション
+
+パラメータファイルのオプションは、``TableAssertion``クラスの``assertEquals``メソッドの第2引数で指定します。
+
+=== Excel形式のオプション
+
+Excel形式のオプションは、``TableAssertion``クラスの``assertEquals``メソッドの第2引数にオプションを設定した``ExcelMeta``クラスのインスタンスを指定します。 +
+``ExcelMeta``クラスのインスタンスは、``Meta``クラスの``excel``メソッドにより生成します。``ExcelMeta``クラスのオプションを設定するメソッドは、自身の``ExcelMeta``インスタンスが復帰値なので、メソッドチェーンで複数のオプションを設定することができます。
+
+.Excel形式のオプション
+[source, java]
+----
+this.tableAssertion.assertEquals("expected_profile.xlsx",
+        Meta.excel().remapSheetName(Collections.singletonMap("sheet1", "PROFILE")), "PROFILE");
+----
+
+==== シート名とテーブル名のマッピング
+
+デフォルトではシート名が検証対象のテーブル名になります。 +
+シート名の長さの制限を超えるなどの理由から、テーブル名とは異なる任意のシート名を使用する場合、シート名とテーブル名のマッピングを定義することができます。
+
+.シート名とテーブル名のマッピング
+[source, java]
+----
+this.tableAssertion.assertEquals("expected_profile.xlsx",
+        Meta.excel().remapSheetName(Collections.singletonMap("sheet1", "PROFILE")), "PROFILE");    <1>
+----
+
+<1> ``ExcelMeta``クラスの``remapSheetName``に、キーにシート名、値にテーブル名を設定した``Map``インスタンスを指定することで、シート名とテーブル名がマッピングされます。
+
+=== CSV形式のオプション
+
+Excel形式のオプションは、``TableAssertion``クラスの``assertEquals``メソッドの第2引数にオプションを設定した``CsvMeta``クラスのインスタンスを指定します。 +
+``CsvMeta``クラスのインスタンスは、``Meta``クラスの``csv``メソッドにより生成します。``CsvMeta``クラスのオプションを設定するメソッドは、自身の``CsvMeta``インスタンスが復帰値なので、メソッドチェーンで複数のオプションを設定することができます。
+
+.CSV形式のオプション
+[source, java]
+----
+this.tableAssertion.assertEquals("expected_profile.csv",
+        Meta.csv().encoding("MS932").format(CsvFormatType.EXCEL), "PROFILE");
+----
+
+==== 文字コード
+
+デフォルトではCSV形式のパラメータファイルは文字コードがUTF-8として読み込まれます。 +
+UTF-8以外の文字コードで作成されたCSV形式のパラメータファイルは、文字コードを指定することで読み込むことができます。
+
+.文字コード
+[source, java]
+----
+this.tableAssertion.assertEquals("expected_profile.csv",
+        Meta.csv().encoding("MS932"), "PROFILE");                      <1>
+
+this.tableAssertion.assertEquals("expected_emp.csv",
+        Meta.csv().encoding(StandardCharsets.UTF_16), "EMP_TABLE");    <2>
+----
+
+<1> ``CsvMeta``クラスの``encoding``メソッドにパラメータファイルの文字コードを文字列で指定します。
+<2> ``CsvMeta``クラスの``encoding``メソッドにパラメータファイルの文字コードを``Charset``インスタンスで指定します。
+
+==== 形式
+
+デフォルトではCSV形式のパラメータファイルはRFC4180で定義されたCSV形式(ただし、空行は無視されます)として読み込まれます。 +
+他の形式で作成されたCSV形式のパラメータファイルは、形式を指定することで読み込むことができます。
+
+.形式
+[source, java]
+----
+this.tableAssertion.assertEquals("expected_profile.csv",
+        Meta.csv().format(CsvFormatType.EXCEL), "PROFILE");    <1>
+----
+
+<1> ``CsvMeta``クラスの``format``メソッドにパラメータファイルの形式をCsvFormatType列挙で指定します。
+
+CsvFormatType列挙については、link:appendix.ja.adoc#_csvformattype[CsvFormatType列挙]を参照してください。
+
+==== NULLをあらわす文字列
+
+デフォルトではCSV形式のパラメータファイルの項目値が文字列「``null``」の項目は値をnullとして読み込まれます。 +
+値をnullとして扱う文字列を指定してパラメータファイルを読み込むことができます。
+
+.NULLをあらわす文字列
+[source, java]
+----
+this.tableAssertion.assertEquals("expected_profile.csv",
+        Meta.csv().nullString("NullValue");    <1>
+----
+
+<1> ``CsvMeta``クラスの``nullString``メソッドに値をnullとして扱う文字列を指定します。
