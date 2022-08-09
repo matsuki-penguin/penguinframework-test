@@ -1,0 +1,149 @@
+= Java Beanの初期化
+
+パラメータファイルをもとにJava Beanを初期化することができます。 +
+単一のJava Beanや、Java Beanの配列、Java BeanのListを初期化することができます。
+
+初期化可能なJava Beanのフィールド型は、link:appendix.ja.adoc#初期化・検証が可能なJava Beanのフィールド型[初期化・検証が可能なJava Beanのフィールド型]を参照してください。
+
+IMPORTANT: ネストしたJava Beanクラスの初期化はサポートしていません。
+
+== 基本的な記載方法
+
+``BeanValueSource``アノテーションをインスタンス変数や引数に指定することで、テストメソッド実行時に変数が初期化されます。
+
+``BeanValueSource``アノテーションにパラメータファイルのパスを指定します。 +
+パラメータファイルがExcel形式の場合、シート名が初期化対象のJava Beanの単純クラス名と対応付けられ、対象のシートの内容でJava Beanが初期化されます。  +
+
+.Java Beanの初期化
+[source, java]
+----
+class testClass {
+
+    @BeanValueSource("prepare.xlsx")                                       <1>
+    public Profile profile;
+
+    @Test
+    void testMethod(@BeanValueSource(path = "prepare.csv") Dept dept) {    <2>
+        ・
+        ・
+        ・
+    }
+}
+----
+
+<1> パラメータファイルのファイルパスを指定した``BeanValueSource``アノテーションをインスタンス変数に指定します。 +
+<2> パラメータファイルのファイルパスを指定した``BeanValueSource``アノテーションを引数に指定します。ファイルパスを指定する属性を明示する場合、path属性を使用します。
+
+パラメータファイルの記載方法はlink:parameter-file.ja.adoc[パラメータファイル]を参照してください。
+
+== パラメータファイルのオプション
+
+パラメータファイルのオプションは、BeanValueSourceアノテーションの属性で指定します。
+
+=== ファイル形式のオプション
+
+デフォルトでファイル形式はファイルの拡張子から自動判別されます。 +
+ファイル形式は、BeanValueSourceアノテーションのtype属性で指定することができます。
+
+----
+@BeanValueSource(path = "prepare.txt", type = FileType.CSV)    <1>
+public Profile profile;
+----
+
+<1> type属性にFileType列挙でファイル形式を指定します。
+
+.FileType列挙
+[options="header"]
+|===
+|FileType列挙 |動作
+|EXCEL |Excel形式としてファイルを扱う
+|CSV |CSV形式としてファイルを扱う
+|===
+
+=== Excel形式のオプション
+
+Excel形式のオプションは、BeanValueSourceアノテーションのexcelMeta属性にBeanExcelMetaアノテーションを指定し、そのBeanExcelMetaアノテーションの属性で指定します。
+
+.Excel形式のオプション
+[source, java]
+----
+@BeanValueSource(path = "prepare.xlsx", excelMeta = @BeanExcelMeta(...))    <1>
+private Profile profile;
+----
+
+<1> excelMeta属性にBeanExcelMetaアノテーションを指定し、BeanExcelMetaアノテーションの属性でExcel形式のオプションを指定します。
+
+==== シート名
+
+デフォルトではシート名が初期化対象のJava Beanの単純クラス名になります。 +
+シート名の長さの制限を超えるなどの理由から、Java Beanの単純クラス名とは異なる任意のシート名を使用する場合、対象シートのシート名を指定します。
+
+.シート名
+[source, java]
+----
+@BeanValueSource(path = "prepare.xlsx", excelMeta = @BeanExcelMeta(sheet = "sheet1"))    <1>
+private Profile profile;
+----
+
+<1> BeanExcelMetaアノテーションのsheet属性に使用するシートのシート名を指定します。
+
+=== CSV形式のオプション
+
+CSV形式のオプションは、BeanValueSourceアノテーションのcsvMeta属性にBeanCsvMetaアノテーションを指定し、そのBeanCsvMetaアノテーションの属性で指定します。
+
+.CSV形式のオプション
+[source, java]
+----
+@BeanValueSource(path = "prepare_class_data.xlsx", csvMeta = @BeanCsvMeta(...))    <1>
+private Profile profile;
+----
+
+<1> csvMeta属性にBeanCsvMetaアノテーションを指定し、BeanCsvMetaアノテーションの属性でCSV形式のオプションを指定します。
+
+==== 文字コード
+
+デフォルトではCSV形式のパラメータファイルは文字コードがUTF-8として読み込まれます。 +
+UTF-8以外の文字コードで作成されたCSV形式のパラメータファイルは、文字コードを指定することで読み込むことができます。
+
+.文字コード
+[source, java]
+----
+@BeanValueSource(path = "prepare_class_data.csv",
+                  csvMeta = @BeanCsvMeta(encoding = "MS932"))    <1>
+private Profile profile;
+----
+
+<1> BeanCsvMetaアノテーションのencoding属性にパラメータファイルの文字コードを指定します。
+
+==== 形式
+
+デフォルトではCSV形式のパラメータファイルはRFC4180で定義されたCSV形式(ただし、空行は無視されます)として読み込まれます。 +
+他の形式で作成されたCSV形式のパラメータファイルは、形式を指定することで読み込むことができます。
+
+.形式
+[source, java]
+----
+@BeanValueSource(path = "prepare_class_data.csv",
+                  csvMeta = @BeanCsvMeta(format = CsvFormatType.EXCEL))    <1>
+private Profile profile;
+----
+
+<1> BeanCsvMetaアノテーションのformat属性にパラメータファイルの形式をCsvFormatType列挙で指定します。
+
+CsvFormatType列挙については、link:appendix.ja.adoc#csvformattype列挙[CsvFormatType列挙]を参照してください。
+
+==== NULLをあらわす文字列
+
+デフォルトではCSV形式のパラメータファイルの項目値が文字列「``null``」の項目は値をnullとして読み込まれます。 +
+値をnullとして扱う文字列を指定してパラメータファイルを読み込むことができます。
+
+.NULLをあらわす文字列
+[source, java]
+----
+@BeanValueSource(path = "prepare_class_data.csv",
+                  csvMeta = @BeanCsvMeta(nullString = "NullValue"))    <1>
+private Profile profile;
+----
+
+<1> BeanCsvMetaアノテーションのnullString属性に値をnullとして扱う文字列を指定します。
+

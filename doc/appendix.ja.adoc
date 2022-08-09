@@ -9,7 +9,7 @@ CsvFormatType列挙の種類と動作内容は以下の通りです。
 |===
 |CsvFormatType列挙|形式|区切り文字|囲い文字|エスケープ文字|空行の扱い|NULLに変換される文字列|ヘッダが足りない場合|値のスペーストリム
 |DEFAULT |RFC4180で定義されている形式(ただし、空行は無視されます) |`,`|`"`|なし|無視||エラー|しない
-|EXCEL |Excelファイル形式 |`,`|`"`|なし|空レコード||無視|しない
+|EXCEL |Excelで使用されるCSV形式 |`,`|`"`|なし|空レコード||無視|しない
 |INFORMIX_UNLOAD |InformixのUNLOADで使用されるCSVアンロード形式 |`\|`|`"`|`\`|無視||エラー|しない
 |INFORMIX_UNLOAD_CSV |InformixのUNLOADで使用されるCSVアンロード形式(エスケープなし) |`,`|`"`|なし|無視||エラー|しない
 |MONGODB_CSV |MongoDBのmongoexportで使用されるCSV形式 |`,`|`"`|`"`|無視||エラー|しない
@@ -21,3 +21,37 @@ CsvFormatType列挙の種類と動作内容は以下の通りです。
 |RFC4180 |RFC4180で定義されている形式|`,`|`"`|なし|空レコード||エラー|しない
 |TDF |タブ区切り形式|TAB|`"`|なし|無視||エラー|する
 |===
+
+== 初期化・検証が可能なJava Beanのフィールド型
+
+* プリミティブ型のboolean
+* プリミティブ型のbyte
+* プリミティブ型のchar
+* プリミティブ型のshort
+* プリミティブ型のint
+* プリミティブ型のlong
+* プリミティブ型のfloat
+* プリミティブ型のdouble
+* java.lang.Boolean
+* java.lang.Byte
+* java.lang.Character
+* java.lang.Short
+* java.lang.Integer
+* java.lang.Long
+* java.lang.Float
+* java.lang.Double
+* java.lang.String
+* java.math.BigInteger
+* java.math.BigDecimal
+* java.lang.Class
+* java.util.Date
+* java.sql.Date
+* java.sql.Time
+* java.sql.Timestamp
+* java.util.Calendar
+* java.time.LocalDate
+* java.time.LocalTime
+* java.time.LocalDateTime
+* java.time.Instant
+* java.io.File
+* java.net.URL
