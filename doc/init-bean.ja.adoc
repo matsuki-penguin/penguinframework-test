@@ -3,7 +3,7 @@
 パラメータファイルをもとにJava Beanを初期化することができます。 +
 単一のJava Beanや、Java Beanの配列、Java BeanのListを初期化することができます。
 
-初期化可能なJava Beanのフィールド型は、link:appendix.ja.adoc#初期化・検証が可能なjava-beanのフィールド型[初期化・検証が可能なJava Beanのフィールド型]を参照してください。
+初期化可能なJava Beanのフィールド型は、link:appendix.ja.adoc#初期化検証が可能なjava-beanのフィールド型[初期化・検証が可能なJava Beanのフィールド型]を参照してください。
 
 IMPORTANT: ネストしたJava Beanクラスの初期化はサポートしていません。
 
