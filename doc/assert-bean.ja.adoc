@@ -1,0 +1,138 @@
+= Java Beanの検証
+
+Java Beanとパラメータファイルの内容を比較します。 +
+復帰値がJava Beanのテストメソッドを実行後、Java Beanと期待値を記載したパラメータファイルを比較することで、テスト対象の処理の正当性を検証することができます。
+
+検証可能なJava Beanのフィールド型は、link:appendix.ja.adoc#初期化検証が可能なjava-beanのフィールド型[初期化・検証が可能なJava Beanのフィールド型]を参照してください。
+
+IMPORTANT: ネストしたJava Beanクラスの検証はサポートしていません。
+
+== 基本的な記載方法
+
+``BeanAssertion``クラスのインスタンス変数、引数を宣言し、``Load``アノテーションを指定します。``Load``アノテーションを指定することで、自動的に変数に``BeanAssertion``クラスのインスタンスが設定されます。  +
+``BeanAssertion``インスタンスの検証メソッドを使用して、Java Beanとパラメータファイルの内容を比較します。
+
+``BeanAssertion``インスタンスの``assertEquals``メソッドで、期待値となるパラメータファイルと、Java Beanの内容が比較されます。 +
+``assertEquals``メソッドの第1引数には期待値となるパラメータファイル、第2引数には比較を実行するJava Beanのインスタンスを指定します。
+
+.Java Beanの検証
+[source, java]
+----
+class testClass {
+
+    @Autowired
+    private ProfileDao profileDao;
+
+    @Load
+    private BeanAssertion beanAssertion;                                                  <1>
+
+    @Test
+    void testMethod() {
+        ProfileEntity profile = this.profileDao.findById(1L);
+
+        this.beanAssertion.assertEquals("expected_profile.xlsx", profile);                <2>
+    }
+
+    @Test
+    void testMethod(@Load BeanAssertion assertion) {                                      <3>
+        List<ProfileEntity> profileList = this.profileDao.findAll();
+
+        assertion.assertEquals("expected_all.xlsx", profileList, ProfileEntity.class);    <4>
+    }
+}
+----
+
+<1> ``BeanAssertion``クラスのインスタンス変数を宣言に``Load``アノテーションを指定することで、自動的に変数に``BeanAssertion``クラスのインスタンスが設定されます。
+<2> ``BeanAssertion``クラスのインスタンスを使用して、期待値となるパラメータファイルと、Java Beanの内容を比較します。
+<3> ``BeanAssertion``クラスの変数は引数として宣言することも可能です。
+<4> Java BeanのListとパラメータファイルを比較する場合、``assertEquals``メソッドの第3引数にListの型パラメータとしたクラスを指定します。
+
+== パラメータファイルのオプション
+
+パラメータファイルのオプションは、``BeanAssertion``クラスの``assertEquals``メソッドの第2引数で指定します。
+
+=== Excel形式のオプション
+
+Excel形式のオプションは、``BeanAssertion``クラスの``assertEquals``メソッドの第2引数にオプションを設定した``ExcelMeta``クラスのインスタンスを指定します。 +
+``ExcelMeta``クラスのインスタンスは、``Meta``クラスの``excel``メソッドにより生成します。``ExcelMeta``クラスのオプションを設定するメソッドは、自身の``ExcelMeta``インスタンスが復帰値なので、メソッドチェーンで複数のオプションを設定することができます。
+
+.Excel形式のオプション
+[source, java]
+----
+this.beanAssertion.assertEquals("expected_profile.xlsx",
+        Meta.excel().remapSheetName(Collections.singletonMap("sheet1", "Profile")), profile);
+----
+
+==== シート名とクラス名のマッピング
+
+デフォルトではシート名が検証対象インスタンスの単純クラス名になります。 +
+シート名の長さの制限を超えるなどの理由から、クラス名とは異なる任意のシート名を使用する場合、シート名とクラス名のマッピングを定義することができます。
+
+.シート名とクラス名のマッピング
+[source, java]
+----
+this.beanAssertion.assertEquals("expected_profile.xlsx",
+        Meta.excel().remapSheetName(Collections.singletonMap("sheet1", "Profile")), "profile");    <1>
+----
+
+<1> ``ExcelMeta``クラスの``remapSheetName``に、キーにシート名、値に単純クラス名を設定した``Map``インスタンスを指定することで、シート名とクラス名がマッピングされます。
+
+=== CSV形式のオプション
+
+Excel形式のオプションは、``beanAssertion``クラスの``assertEquals``メソッドの第2引数にオプションを設定した``CsvMeta``クラスのインスタンスを指定します。 +
+``CsvMeta``クラスのインスタンスは、``Meta``クラスの``csv``メソッドにより生成します。``CsvMeta``クラスのオプションを設定するメソッドは、自身の``CsvMeta``インスタンスが復帰値なので、メソッドチェーンで複数のオプションを設定することができます。
+
+.CSV形式のオプション
+[source, java]
+----
+this.beanAssertion.assertEquals("expected_profile.csv",
+        Meta.csv().encoding("MS932").format(CsvFormatType.EXCEL), "PROFILE");
+----
+
+==== 文字コード
+
+デフォルトではCSV形式のパラメータファイルは文字コードがUTF-8として読み込まれます。 +
+UTF-8以外の文字コードで作成されたCSV形式のパラメータファイルは、文字コードを指定することで読み込むことができます。
+
+.文字コード
+[source, java]
+----
+this.beanAssertion.assertEquals("expected_profile.csv",
+        Meta.csv().encoding("MS932"), profile);                      <1>
+
+this.beanAssertion.assertEquals("expected_emp.csv",
+        Meta.csv().encoding(StandardCharsets.UTF_16), empBean);    <2>
+----
+
+<1> ``CsvMeta``クラスの``encoding``メソッドにパラメータファイルの文字コードを文字列で指定します。
+<2> ``CsvMeta``クラスの``encoding``メソッドにパラメータファイルの文字コードを``Charset``インスタンスで指定します。
+
+==== 形式
+
+デフォルトではCSV形式のパラメータファイルはRFC4180で定義されたCSV形式(ただし、空行は無視されます)として読み込まれます。 +
+他の形式で作成されたCSV形式のパラメータファイルは、形式を指定することで読み込むことができます。
+
+.形式
+[source, java]
+----
+this.beanAssertion.assertEquals("expected_profile.csv",
+        Meta.csv().format(CsvFormatType.EXCEL), profile);    <1>
+----
+
+<1> ``CsvMeta``クラスの``format``メソッドにパラメータファイルの形式をCsvFormatType列挙で指定します。
+
+CsvFormatType列挙については、link:appendix.ja.adoc#csvformattype列挙[CsvFormatType列挙]を参照してください。
+
+==== nullをあらわす文字列
+
+デフォルトではCSV形式のパラメータファイルの項目値が文字列「``null``」の項目は値をnullとして読み込まれます。 +
+値をnullとして扱う文字列を指定してパラメータファイルを読み込むことができます。
+
+.nullをあらわす文字列
+[source, java]
+----
+this.beanAssertion.assertEquals("expected_profile.csv",
+        Meta.csv().nullString("NullValue"), profile);;    <1>
+----
+
+<1> ``CsvMeta``クラスの``nullString``メソッドに値をnullとして扱う文字列を指定します。

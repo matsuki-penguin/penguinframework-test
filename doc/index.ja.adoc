@@ -4,4 +4,5 @@
 * link:init-database.ja.adoc[データベースの初期化]
 * link:assert-database.ja.adoc[データベースの検証]
 * link:init-bean.ja.adoc[Java Beanの初期化]
+* link:assert-bean.ja.adoc[Java Beanの検証]
 * link:appendix.ja.adoc[Appendix]

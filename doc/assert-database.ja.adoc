@@ -6,7 +6,7 @@
 == 基本的な記載方法
 
 ``TableAssertion``クラスのインスタンス変数、引数を宣言し、``Load``アノテーションを指定します。``Load``アノテーションを指定することで、自動的に変数に``TableAssertion``クラスのインスタンスが設定されます。  +
-``TableAssertion``インスタンスの検証メソッドを使用して、データベースをパラメータファイルの内容を比較します。
+``TableAssertion``インスタンスの検証メソッドを使用して、データベースとパラメータファイルの内容を比較します。
 
 ``TableAssertion``インスタンスの``assertEquals``メソッドで、期待値となるパラメータファイルと、実際のデータベースの内容が比較されます。 +
 ``assertEquals``メソッドの第1引数には期待値となるパラメータファイル、第2引数には比較を実行するテーブル名を指定します。
@@ -46,7 +46,7 @@ class testClass {
 }
 ----
 
-<1> TableAssertionクラスのインスタンス変数を宣言に``Load``アノテーションを指定することで、自動的に変数に``TableAssertion``クラスのインスタンスが設定されます。
+<1> ``TableAssertion``クラスのインスタンス変数を宣言に``Load``アノテーションを指定することで、自動的に変数に``TableAssertion``クラスのインスタンスが設定されます。
 <2> ``TableAssertion``クラスのインスタンスを使用して、期待値となるパラメータファイルと、実際のデータベースの内容を比較します。
 <3> ``TableAssertion``クラスの変数は引数として宣言することも可能です。
 
@@ -126,16 +126,16 @@ this.tableAssertion.assertEquals("expected_profile.csv",
 
 CsvFormatType列挙については、link:appendix.ja.adoc#csvformattype列挙[CsvFormatType列挙]を参照してください。
 
-==== NULLをあらわす文字列
+==== nullをあらわす文字列
 
 デフォルトではCSV形式のパラメータファイルの項目値が文字列「``null``」の項目は値をnullとして読み込まれます。 +
 値をnullとして扱う文字列を指定してパラメータファイルを読み込むことができます。
 
-.NULLをあらわす文字列
+.nullをあらわす文字列
 [source, java]
 ----
 this.tableAssertion.assertEquals("expected_profile.csv",
-        Meta.csv().nullString("NullValue");    <1>
+        Meta.csv().nullString("NullValue"), "PROFILE");    <1>
 ----
 
 <1> ``CsvMeta``クラスの``nullString``メソッドに値をnullとして扱う文字列を指定します。
