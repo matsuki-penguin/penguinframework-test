@@ -1,0 +1,29 @@
+= イントロダクション
+
+Penguin Framework Testは、SpringとJUnit 5、DB Unitのインテグレーションを提供します。 +
+
+JUnit 5のExtension Modelとして機能が提供され、テストコードはシンプルな実装で、テストデータの設定とテスト結果の検証が可能となります。 +
+また、テストデータはMicrosoft Excel形式、もしくはCSV形式で記載することができ、テストコードとテストデータを切り離して管理することが可能です。
+
+== 提供される機能
+
+テストデータとなるlink:parameter-file.ja.adoc[パラメータファイル]を用意し、以下の提供機能を使用して、データベースやJava Beanの初期化・検証を実装します。
+
+* link:init-database.ja.adoc[データベースの初期化]
+* link:assert-database.ja.adoc[データベースの検証]
+* link:init-bean.ja.adoc[Java Beanの初期化]
+* link:assert-bean.ja.adoc[Java Beanの検証]
+
+== 使用方法
+
+テストコードでテストクラスに``ExtendWith``アノテーションを指定し、本拡張機能を有効にします。
+
+.拡張機能の有効化
+[source, java]
+----
+@ExtendWith({ SpringExtension.class, PenguinExtension.class })    <1>
+@SpringBootTest(classes = Application.class)
+class TestClass {
+----
+
+<1> ``ExtendWith``アノテーションに``PenguinExtension.class``を指定します。Spring Framework Testの拡張機能も同時に有効化する場合は、``SpringExtension.class``も指定します。
