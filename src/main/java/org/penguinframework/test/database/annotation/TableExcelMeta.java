@@ -6,5 +6,5 @@ public @interface TableExcelMeta {
      *
      * @return Excelのシートとデータベースのテーブルの対応
      */
-    SheetMapping[] sheetMapping() default {};
+    SheetMeta[] sheetMeta() default {};
 }

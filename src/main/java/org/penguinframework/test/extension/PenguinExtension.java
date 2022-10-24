@@ -69,6 +69,8 @@ public class PenguinExtension implements BeforeAllCallback, BeforeEachCallback, 
         // フィールドに値を設定
         BeanLoader.initFields(context.getRequiredTestInstance());
 
+        TestInstances instances = context.getRequiredTestInstances();
+        Class<?> testClass = context.getRequiredTestClass();
         DataSource dataSource = this.getDataSource(context);
         if (dataSource != null) {
             Method testMethod = context.getRequiredTestMethod();
@@ -87,11 +89,9 @@ public class PenguinExtension implements BeforeAllCallback, BeforeEachCallback, 
 
             // TableValueSourceアノテーションで指定されているExcelファイルをデータベースにClean & Insert
             Connection connection = dataSource.getConnection();
-            TableLoader.load(testMethod, connection, databaseMeta);
+            TableLoader.load(testClass, testMethod, connection, databaseMeta);
 
             // TableAssertionのインスタンス注入
-            Class<?> testClass = context.getRequiredTestClass();
-            TestInstances instances = context.getRequiredTestInstances();
             TableAssertion tableAssertion = new TableAssertion(connection, testClass, databaseMeta);
             this.setTableAssertion(context, tableAssertion);
             for (Object instance : instances.getAllInstances()) {
@@ -101,16 +101,16 @@ public class PenguinExtension implements BeforeAllCallback, BeforeEachCallback, 
                     FieldUtils.writeField(field, instance, tableAssertion, true);
                 }
             }
+        }
 
-            // BeanAssertionのインスタンス注入
-            BeanAssertion beanAssertion = new BeanAssertion(testClass);
-            this.setBeanAssertion(context, beanAssertion);
-            for (Object instance : instances.getAllInstances()) {
-                Field[] fields = FieldUtils.getFieldsListWithAnnotation(instance.getClass(), Load.class).stream()
-                        .filter(f -> f.getType() == BeanAssertion.class).toArray(Field[]::new);
-                for (Field field : fields) {
-                    FieldUtils.writeField(field, instance, beanAssertion, true);
-                }
+        // BeanAssertionのインスタンス注入
+        BeanAssertion beanAssertion = new BeanAssertion(testClass);
+        this.setBeanAssertion(context, beanAssertion);
+        for (Object instance : instances.getAllInstances()) {
+            Field[] fields = FieldUtils.getFieldsListWithAnnotation(instance.getClass(), Load.class).stream()
+                    .filter(f -> f.getType() == BeanAssertion.class).toArray(Field[]::new);
+            for (Field field : fields) {
+                FieldUtils.writeField(field, instance, beanAssertion, true);
             }
         }
     }

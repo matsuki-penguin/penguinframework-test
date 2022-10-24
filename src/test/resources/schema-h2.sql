@@ -5,27 +5,23 @@ create table profile (
     primary key (id)
 );
 
-create table all_type (
-    int_type int,
-    boolean_type boolean,
-    tinyint_type tinyint,
-    smallint_type smallint,
-    bigint_type bigint,
-    identity_type identity,
-    decimal_type decimal(20,15),
-    double_type double,
-    real_type real,
-    time_type time(9),
-    date_type date,
-    timestamp_type timestamp(9),
-    binary_type binary(3),
-    other_type other,
-    varchar_type varchar,
-    varchar_ignorecase_type varchar_ignorecase,
-    char_type char,
-    blob_type blob,
-    clob_type clob,
-    uuid_type uuid,
-    array_type boolean array,
-    primary key (identity_type)
+create table basic_type (
+    integer_type integer,         -- Mapped to java.lang.Integer
+    long_type bigint,             -- Mapped to java.lang.Long
+    boolean_type boolean,         -- Mapped to java.lang.Boolean
+    float_type real,              -- Mapped to java.lang.Float
+    double_type double precision, -- Mapped to java.lang.Double
+    biginteger_type numeric,      -- Mapped to java.math.BigInteger
+    bigdecimal_type decfloat,     -- Mapped to java.math.BigDecimal
+    string_type varchar,          -- Mapped to java.lang.String
+    byte_array_type blob,         -- Mapped to byte[]
+    primary key (integer_type)
+);
+
+create table datetime_type (
+    integer_type integer,         -- Mapped to java.lang.Integer
+    date_type date,               -- Mapped to java.sql.Date or java.time.LocalDate
+    time_type time(9),            -- Mapped to java.sql.Time or java.time.LocalTime
+    timestamp_type timestamp(9),  -- Mapped to java.sql.Timestamp or java.time.LocalDateTime
+    primary key (integer_type)
 );

@@ -6,3 +6,28 @@ create table profile (
     birthday date,
     primary key (id)
 );
+
+drop table if exists basic_type;
+
+create table basic_type (
+    integer_type integer not null,         -- Mapped to java.lang.Integer
+    long_type bigint,             -- Mapped to java.lang.Long
+    boolean_type boolean,        -- Mapped to java.lang.Boolean
+    float_type real,              -- Mapped to java.lang.Float
+    double_type double,           -- Mapped to java.lang.Double
+    biginteger_type decimal(31),       -- Mapped to java.math.BigDecimal (not java.math.BigInteger)
+    bigdecimal_type decimal(31, 16), -- Mapped to java.math.BigDecimal (DB Unit not supported decfloat
+    string_type varchar(20000),   -- Mapped to java.lang.String
+    byte_array_type blob,         -- Mapped to byte[]
+    primary key (integer_type)
+);
+
+drop table if exists datetime_type;
+
+create table datetime_type (
+    integer_type integer not null,         -- Mapped to java.lang.Integer
+    date_type date,               -- Mapped to java.sql.Date or java.time.LocalDate
+    time_type time,               -- Mapped to java.sql.Time or java.time.LocalTime
+    timestamp_type timestamp(9),     -- Mapped to java.sql.Timestamp or java.time.LocalDateTime
+    primary key (integer_type)
+);

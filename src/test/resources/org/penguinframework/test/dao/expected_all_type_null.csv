@@ -1,3 +1,0 @@
-﻿int_type,boolean_type,tinyint_type,smallint_type,bigint_type,identity_type,decimal_type,double_type,real_type,time_type,date_type,timestamp_type,binary_type,varchar_type,varchar_ignorecase_type,char_type,blob_type,clob_type,uuid_type
-null,null,null,null,null,1,null,null,null,12:13:14.987654321,null,null,null,null,null,null,null,null,null
-null,null,null,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null

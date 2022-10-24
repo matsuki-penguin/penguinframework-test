@@ -25,10 +25,8 @@ public class TableLoader {
     private TableLoader() {
     }
 
-    public static void load(Method targetMethod, Connection connection, DatabaseMeta databaseMeta)
+    public static void load(Class<?> targetClass, Method targetMethod, Connection connection, DatabaseMeta databaseMeta)
             throws DatabaseUnitException, IOException, SQLException {
-        Class<?> targetClass = targetMethod.getDeclaringClass();
-
         // クラスに指定されているTableValueSourceアノテーションを取得
         List<TableValueSource> tableValueSourceListForClass = AnnotationUtils.findRepeatableAnnotations(targetClass,
                 TableValueSource.class);
@@ -51,6 +49,9 @@ public class TableLoader {
             Connection connection, DatabaseMeta databaseMeta) throws DatabaseUnitException, SQLException, IOException {
         // 読み込むファイルのURLオブジェクトを生成
         URL url = targetClass.getResource(StringUtils.firstNonEmpty(tableValueSource.value(), tableValueSource.path()));
+
+        System.out.println(
+                connection.getMetaData().getJDBCMajorVersion() + ", " + connection.getMetaData().getJDBCMinorVersion());
 
         TableFileAdapter fileAdapter;
         switch (FileType.valueOf(url)) {

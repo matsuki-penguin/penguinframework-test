@@ -6,21 +6,25 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.penguinframework.test.bean.annotation.BeanExcelMeta;
-import org.penguinframework.test.database.annotation.SheetMapping;
+import org.penguinframework.test.database.annotation.SheetMeta;
 import org.penguinframework.test.database.annotation.TableExcelMeta;
 
 public class ExcelMeta extends Meta {
 
     private Map<String, String> remapSheetName = Collections.emptyMap();
+    private Map<String, String[]> ignoreCols = Collections.emptyMap();
 
     protected ExcelMeta() {
         super();
     }
 
     public static ExcelMeta of(TableExcelMeta annotation) {
-        Map<String, String> remapTableName = Arrays.stream(annotation.sheetMapping())
-                .collect(Collectors.toMap(SheetMapping::sheet, SheetMapping::table, (name1, name2) -> name1));
-        return new ExcelMeta().remapSheetName(remapTableName);
+        Map<String, String> remapTableName = Arrays.stream(annotation.sheetMeta())
+                .filter(meta -> !meta.table().equals(""))
+                .collect(Collectors.toMap(SheetMeta::sheet, SheetMeta::table, (name1, name2) -> name1));
+        Map<String, String[]> ignoreCols = Arrays.stream(annotation.sheetMeta())
+                .collect(Collectors.toMap(SheetMeta::sheet, SheetMeta::ignoreCols, (name1, name2) -> name1));
+        return new ExcelMeta().remapSheetName(remapTableName).ignoreCols(ignoreCols);
     }
 
     public static ExcelMeta of(BeanExcelMeta annotation) {
@@ -34,5 +38,14 @@ public class ExcelMeta extends Meta {
 
     public Map<String, String> remapSheetName() {
         return this.remapSheetName;
+    }
+
+    public ExcelMeta ignoreCols(Map<String, String[]> ignoreCols) {
+        this.ignoreCols = ignoreCols;
+        return this;
+    }
+
+    public Map<String, String[]> ignoreCols() {
+        return this.ignoreCols;
     }
 }

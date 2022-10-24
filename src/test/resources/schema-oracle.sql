@@ -6,3 +6,28 @@ create table profile (
     birthday date,
     primary key (id)
 );
+
+drop table basic_type cascade constraints purge;
+
+create table basic_type (
+    integer_type number(9),         -- Mapped to java.lang.Integer
+    long_type number(18),             -- Mapped to java.lang.Long
+    boolean_type number(1),         -- Mapped to java.lang.Boolean
+    float_type real,              -- Mapped to java.lang.Float
+    double_type float, -- Mapped to java.lang.Double
+    biginteger_type numeric(30),      -- Mapped to java.math.BigInteger
+    bigdecimal_type numeric(30, 16),     -- Mapped to java.math.BigDecimal
+    string_type varchar2(2000),          -- Mapped to java.lang.String
+    byte_array_type blob,         -- Mapped to byte[]
+    primary key (integer_type)
+);
+
+drop table datetime_type cascade constraints purge;
+
+create table datetime_type (
+    integer_type number(9),         -- Mapped to java.lang.Integer
+    date_type varchar2(2000),               -- Defined as a placeholder because oracle does not have a date type
+    time_type varchar2(2000),            -- Defined as a placeholder because oracle does not have a time type
+    timestamp_type timestamp(9),  -- Mapped to java.sql.Timestamp or java.time.LocalDateTime
+    primary key (integer_type)
+);

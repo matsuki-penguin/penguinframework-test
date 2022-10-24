@@ -1,6 +1,8 @@
 package org.penguinframework.test.support;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
@@ -11,6 +13,9 @@ import org.penguinframework.test.exception.ReflectionRuntimeException;
 import org.penguinframework.test.type.Platform;
 
 public class DatabaseUtils {
+
+    private static final String POSTGRESQL_DRIVER_NAME = "PostgreSQL";
+    private static final String MSSQL_DRIVER_NAME = "SQL Server";
 
     private DatabaseUtils() {
     }
@@ -43,5 +48,25 @@ public class DatabaseUtils {
                 InsertIdentityOperation.IDENTITY_FILTER_EXTENDED);
 
         return databaseConnection;
+    }
+
+    /**
+     * JDBCドライバがJDBC 4.2以上であるか否かを取得する。
+     * 
+     * @param databaseMetaData
+     * @return
+     * @throws SQLException
+     */
+    public static boolean isSupportedJava8(DatabaseMetaData databaseMetaData) throws SQLException {
+        return databaseMetaData.getJDBCMajorVersion() > 4
+                || (databaseMetaData.getJDBCMajorVersion() == 4 && databaseMetaData.getJDBCMinorVersion() >= 2);
+    }
+
+    public static boolean isMssql(DatabaseMetaData databaseMetaData) throws SQLException {
+        return databaseMetaData.getDriverName().contains(DatabaseUtils.MSSQL_DRIVER_NAME);
+    }
+
+    public static boolean isPostgresql(DatabaseMetaData databaseMetaData) throws SQLException {
+        return databaseMetaData.getDriverName().contains(DatabaseUtils.POSTGRESQL_DRIVER_NAME);
     }
 }

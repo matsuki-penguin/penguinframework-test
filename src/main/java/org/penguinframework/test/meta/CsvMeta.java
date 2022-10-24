@@ -23,6 +23,7 @@ public class CsvMeta extends Meta {
     private Charset encoding = Charset.forName(CsvMeta.DEFAULT_ENCODING);
     private CsvFormatType format = CsvMeta.DEFAULT_FORMAT;
     private String nullString = CsvMeta.DEFAULT_NULL_STRING;
+    private String[] ignoreCols = new String[] {};
 
     protected CsvMeta() {
         super();
@@ -30,7 +31,7 @@ public class CsvMeta extends Meta {
 
     public static CsvMeta of(TableCsvMeta annotation) {
         return new CsvMeta().encoding(annotation.encoding()).format(annotation.format())
-                .nullString(annotation.nullString());
+                .nullString(annotation.nullString()).ignoreCols(annotation.ignoreCols());
     }
 
     public static CsvMeta of(BeanCsvMeta annotation) {
@@ -68,5 +69,14 @@ public class CsvMeta extends Meta {
 
     public String nullString() {
         return this.nullString;
+    }
+
+    public CsvMeta ignoreCols(String[] ignoreCols) {
+        this.ignoreCols = ignoreCols;
+        return this;
+    }
+
+    public String[] ignoreCols() {
+        return this.ignoreCols;
     }
 }

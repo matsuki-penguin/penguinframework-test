@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.dataset.IDataSet;
@@ -62,6 +63,7 @@ public class BeanAssertion {
 
         URL url = this.testClass.getResource(expectedFilePath);
         FileType fileType = FileType.valueOf(url);
+        String[] ignoreCols = null;
 
         String actualClassName = beanClass.getSimpleName();
 
@@ -71,10 +73,12 @@ public class BeanAssertion {
             case EXCEL:
                 ExcelMeta excelMeta = (meta instanceof ExcelMeta) ? ExcelMeta.class.cast(meta) : Meta.excel();
                 expectedDataSet = new ExcelDataSet(url, excelMeta);
+                ignoreCols = excelMeta.ignoreCols().get(actualClassName);
                 break;
             case CSV:
                 CsvMeta csvMeta = (meta instanceof CsvMeta) ? CsvMeta.class.cast(meta) : Meta.csv();
                 expectedDataSet = new CsvDataSet(url, actualClassName, csvMeta);
+                ignoreCols = csvMeta.ignoreCols();
                 break;
             default:
                 throw new IllegalArgumentException("Unknown file type. : " + expectedFilePath);
@@ -84,7 +88,8 @@ public class BeanAssertion {
             IDataSet dataSet = new BeanDataSet(actualBean, beanClass);
             ITable actualTable = dataSet.getTable(actualClassName);
 
-            Assertion.assertEquals(expectedTable, actualTable);
+            Assertion.assertEqualsIgnoreCols(expectedTable, actualTable,
+                    ObjectUtils.defaultIfNull(ignoreCols, new String[] {}));
         } catch (IOException | DatabaseUnitException e) {
             throw new AssertRuntimeException(e);
         }

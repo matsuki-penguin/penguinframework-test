@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
@@ -13,12 +14,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.penguinframework.example.Application;
-import org.penguinframework.example.bean.AllTypeBean;
+import org.penguinframework.example.application.Application;
+import org.penguinframework.example.application.bean.AllTypeBean;
 import org.penguinframework.test.annotation.Load;
 import org.penguinframework.test.bean.adapter.BeanFileAdapterTest.Profile;
 import org.penguinframework.test.bean.assertion.BeanAssertion;
 import org.penguinframework.test.extension.PenguinExtension;
+import org.penguinframework.test.meta.Meta;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +37,11 @@ class BeanAssertionTest {
         @Load
         private BeanAssertion beanAssertion;
 
+        private Meta getExcelMeta(String beanName) {
+            // jacocoで実行したときに内部クラスに追加されるフィールドを比較対象から除外
+            return Meta.excel().ignoreCols(Collections.singletonMap(beanName, new String[] { "$jacocoData" }));
+        }
+
         @Test
         @DisplayName("単一のBeanを検証できること")
         void singleBean() {
@@ -43,7 +50,7 @@ class BeanAssertionTest {
             profile.setName("penguin");
             profile.setBirthday(LocalDate.of(2002, 1, 1));
 
-            this.beanAssertion.assertEquals("expected_for_bean.xlsx", profile);
+            this.beanAssertion.assertEquals("expected_for_bean.xlsx", getExcelMeta("Profile"), profile);
         }
 
         @Test
@@ -55,7 +62,7 @@ class BeanAssertionTest {
             profile.setName("penguin");
             profile.setBirthday(LocalDate.of(2002, 1, 1));
 
-            this.beanAssertion.assertEquals("expected_for_bean.xlsx", profile);
+            this.beanAssertion.assertEquals("expected_for_bean.xlsx", getExcelMeta("Profile"), profile);
         }
 
         @Test
@@ -69,12 +76,14 @@ class BeanAssertionTest {
             profile.setBirthday(LocalDate.of(2002, 1, 1));
             profileList.add(profile);
 
-            this.beanAssertion.assertEquals("expected_for_bean.xlsx", profileList, Profile.class);
+            this.beanAssertion.assertEquals("expected_for_bean.xlsx", getExcelMeta("Profile"), profileList,
+                    Profile.class);
         }
 
         @Test
         @DisplayName("Beanがnullの場合、例外が発生すること")
         @Tag("error")
+
         void beanNull() {
             IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class,
                     () -> this.beanAssertion.assertEquals("expected_for_bean.xlsx", null));
@@ -155,7 +164,7 @@ class BeanAssertionTest {
                 bean.setInstant(java.sql.Timestamp.valueOf("2021-11-30 13:14:15").toInstant());
                 bean.setUuid(java.util.UUID.fromString("6779defb-6d49-4e2e-b3dd-95cd071cea5c"));
 
-                this.beanAssertion.assertEquals("expected_all_type.xlsx", bean);
+                this.beanAssertion.assertEquals("expected_all_type.xlsx", getExcelMeta("AllTypeBean"), bean);
             }
 
             @Test
@@ -201,7 +210,8 @@ class BeanAssertionTest {
                 bean.setInstant(java.sql.Timestamp.valueOf("2021-11-30 13:14:15.123456789").toInstant());
                 bean.setUuid(java.util.UUID.fromString("6779defb-6d49-4e2e-b3dd-95cd071cea5c"));
 
-                this.beanAssertion.assertEquals("expected_all_type_format_text.xlsx", bean);
+                this.beanAssertion.assertEquals("expected_all_type_format_text.xlsx", getExcelMeta("AllTypeBean"),
+                        bean);
             }
 
             @Test
@@ -210,7 +220,7 @@ class BeanAssertionTest {
                 AllTypeBean bean = new AllTypeBean();
                 bean.setPrimitiveChar(' '); // プリミティブのchar型は文字として検証するので、文字として表現できない初期値0は検証できない
 
-                this.beanAssertion.assertEquals("expected_all_type_null.xlsx", bean);
+                this.beanAssertion.assertEquals("expected_all_type_null.xlsx", getExcelMeta("AllTypeBean"), bean);
             }
         }
     }

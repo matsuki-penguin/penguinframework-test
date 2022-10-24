@@ -1,0 +1,2 @@
+﻿integer_type,long_type,boolean_type,float_type,double_type,biginteger_type,bigdecimal_type,string_type,byte_array_type
+100,1234567890123,TRUE,1.7320508,1.4142110356,987654321987654321,3.14159265358979,penguin!,[TEXT]abc

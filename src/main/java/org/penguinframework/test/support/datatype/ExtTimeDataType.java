@@ -1,5 +1,7 @@
 package org.penguinframework.test.support.datatype;
 
+import java.sql.DatabaseMetaData;
+import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +15,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.AbstractDataType;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
+import org.penguinframework.test.support.DatabaseUtils;
 import org.penguinframework.test.support.DateTimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,31 +80,39 @@ public class ExtTimeDataType extends AbstractDataType {
 
     @Override
     public Object getSqlValue(int column, ResultSet resultSet) throws SQLException, TypeCastException {
-        if (ExtTimeDataType.logger.isDebugEnabled()) {
-            ExtTimeDataType.logger.debug("getSqlValue(column={}, resultSet={}) - start", Integer.valueOf(column),
-                    resultSet);
-        }
+        if (DatabaseUtils.isSupportedJava8(resultSet.getStatement().getConnection().getMetaData())) {
+            if (ExtTimeDataType.logger.isDebugEnabled()) {
+                ExtTimeDataType.logger.debug("getSqlValue(column={}, resultSet={}) - start", Integer.valueOf(column),
+                        resultSet);
+            }
 
-        String value = resultSet.getString(column);
-        if (value == null || resultSet.wasNull()) {
-            return null;
+            return resultSet.getObject(column, LocalTime.class);
+        } else {
+            return java.sql.Time.class.cast(DataType.TIME.getSqlValue(column, resultSet)).toLocalTime();
         }
-
-        return DateTimeUtils.toLocalTime(value);
     }
 
     @Override
     public void setSqlValue(Object value, int column, PreparedStatement statement)
             throws SQLException, TypeCastException {
-        if (ExtTimeDataType.logger.isDebugEnabled()) {
-            ExtTimeDataType.logger.debug("setSqlValue(value={}, column={}, statement={}) - start", value,
-                    Integer.valueOf(column), statement);
-        }
+        DatabaseMetaData databaseMetaData = statement.getConnection().getMetaData();
 
-        Object sqlValue = typeCast(value);
-        if (sqlValue != null) {
-            sqlValue = DateTimeUtils.toString(LocalTime.class.cast(typeCast(value)));
+        if (DatabaseUtils.isSupportedJava8(databaseMetaData)) {
+            if (ExtTimeDataType.logger.isDebugEnabled()) {
+                ExtTimeDataType.logger.debug("setSqlValue(value={}, column={}, statement={}) - start", value,
+                        Integer.valueOf(column), statement);
+            }
+
+            if (DatabaseUtils.isMssql(databaseMetaData)) {
+                statement.setObject(column, LocalTime.class.cast(typeCast(value)), JDBCType.TIMESTAMP); // SQL Server
+            } else if (DatabaseUtils.isPostgresql(databaseMetaData)) {
+                statement.setObject(column, LocalTime.class.cast(typeCast(value))); // PostgreSQL
+            } else {
+                statement.setObject(column, LocalTime.class.cast(typeCast(value)), JDBCType.TIME);
+            }
+        } else {
+            DataType.TIME.setSqlValue(java.sql.Time.valueOf(LocalTime.class.cast(this.typeCast(value))), column,
+                    statement);
         }
-        statement.setString(column, String.class.cast(sqlValue));
     }
 }

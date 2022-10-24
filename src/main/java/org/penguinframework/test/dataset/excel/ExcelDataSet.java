@@ -35,7 +35,8 @@ public class ExcelDataSet extends AbstractDataSet {
             for (int i = 0; i < sheetCount; i++) {
                 String sheetName = meta.remapSheetName().getOrDefault(workbook.getSheetName(i),
                         workbook.getSheetName(i));
-                ITable table = new ExcelTable(sheetName, workbook.getSheetAt(i));
+                ITable table = new ExcelTable(sheetName, workbook.getSheetAt(i),
+                        meta.ignoreCols().get(workbook.getSheetName(i)));
                 this.tables.add(table.getTableMetaData().getTableName(), table);
             }
         } catch (EncryptedDocumentException e) {

@@ -1,0 +1,2 @@
+integer_type,long_type,boolean_type,float_type,double_type,biginteger_type,bigdecimal_type,string_type,byte_array_type
+99,123456789012345678,1,1.41421356,1.41421356237,123456789012345678901234567890,-1.41421356237,add!,[TEXT]abc

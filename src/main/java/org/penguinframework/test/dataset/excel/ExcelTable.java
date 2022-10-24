@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -36,10 +37,12 @@ public class ExcelTable extends AbstractTable {
     /** Decimal format symbols. */
     private final DecimalFormatSymbols symbols = new DecimalFormatSymbols();
 
-    public ExcelTable(String sheetName, Sheet sheet) {
+    private List<Integer> columnIndexList = new ArrayList<>();
+
+    public ExcelTable(String sheetName, Sheet sheet, String[] ignoreCols) {
         int rowCount = sheet.getLastRowNum();
         if (rowCount >= 0 && sheet.getRow(0) != null) {
-            this.metaData = ExcelTable.createMetaData(sheetName, sheet.getRow(0));
+            this.metaData = this.createMetaData(sheetName, sheet.getRow(0), ignoreCols);
         } else {
             this.metaData = new DefaultTableMetaData(sheetName, new Column[0]);
         }
@@ -49,7 +52,7 @@ public class ExcelTable extends AbstractTable {
         this.symbols.setDecimalSeparator('.');
     }
 
-    static ITableMetaData createMetaData(String tableName, Row sampleRow) {
+    private ITableMetaData createMetaData(String tableName, Row sampleRow, String[] ignoreCols) {
         List<Column> columnList = new ArrayList<>();
         for (int i = sampleRow.getFirstCellNum(); i < sampleRow.getLastCellNum(); i++) {
             String columnName = StringUtils.trim(sampleRow.getCell(i).getRichStringCellValue().getString());
@@ -61,7 +64,10 @@ public class ExcelTable extends AbstractTable {
                 break;
             }
 
-            columnList.add(new Column(columnName, DataType.UNKNOWN));
+            if (!ArrayUtils.contains(ignoreCols, columnName)) {
+                columnList.add(new Column(columnName, DataType.UNKNOWN));
+                this.columnIndexList.add(i);
+            }
         }
 
         return new DefaultTableMetaData(tableName, columnList.toArray(new Column[0]));
@@ -82,7 +88,7 @@ public class ExcelTable extends AbstractTable {
         this.assertValidRowIndex(row);
 
         int columnIndex = this.getColumnIndex(column);
-        Cell cell = this.sheet.getRow(row + 1).getCell(columnIndex);
+        Cell cell = this.sheet.getRow(row + 1).getCell(this.columnIndexList.get(columnIndex));
         if (cell == null) {
             return null;
         }

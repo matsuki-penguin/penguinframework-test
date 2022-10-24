@@ -2,6 +2,7 @@ package org.penguinframework.test.support.datatype;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Types;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +29,11 @@ public abstract class ExtDataType extends DataType {
     public static final DataType EXT_DATE = new ExtDateDataType();
     public static final DataType EXT_TIME = new ExtTimeDataType();
     public static final DataType EXT_TIMESTAMP = new ExtTimestampDataType();
+    public static final DataType EXT_TINYINT = new ExtIntegerDataType("TINYINT", Types.TINYINT);
+    public static final DataType EXT_SMALLINT = new ExtIntegerDataType("SMALLINT", Types.SMALLINT);
+    public static final DataType EXT_INTEGER = new ExtIntegerDataType("INTEGER", Types.INTEGER);
+    public static final DataType EXT_NUMERIC = new ExtNumberDataType("NUMERIC", Types.NUMERIC);
+    public static final DataType EXT_DECIMAL = new ExtNumberDataType("DECIMAL", Types.DECIMAL);
 
     private static final DataType[] TYPES = { // Supported types
             DataType.VARCHAR, // Java type is java.lang.String, SQL type is Types.VARCHAR
@@ -37,13 +43,13 @@ public abstract class ExtDataType extends DataType {
             DataType.NVARCHAR, // Java type is java.lang.String, SQL type is Types.NVARCHAR
             DataType.LONGNVARCHAR, // Java type is java.lang.String, SQL type is Types.LONGNVARCHAR
             ExtDataType.EXT_CLOB, // Java type is java.lang.String, SQL type is Types.CLOB
-            DataType.NUMERIC, // Java type is java.math.BigDecimal, SQL type is Types.NUMERIC
-            DataType.DECIMAL, // Java type is java.math.BigDecimal, SQL type is Types.DECIMAL
+            ExtDataType.EXT_NUMERIC, // Java type is java.math.BigDecimal, SQL type is Types.NUMERIC
+            ExtDataType.EXT_DECIMAL, // Java type is java.math.BigDecimal, SQL type is Types.DECIMAL
             DataType.BOOLEAN, // Java type is java.lang.Boolean, SQL type is Types.BOOLEAN
             DataType.BIT, // Java type is java.lang.Boolean, SQL type is Types.BIT
-            DataType.INTEGER, // Java type is java.lang.Integer, SQL type is Types.INTEGER
-            DataType.TINYINT, // Java type is java.lang.Integer, SQL type is Types.TINYINT
-            DataType.SMALLINT, // Java type is java.lang.Integer, SQL type is Types.SMALLINT
+            ExtDataType.EXT_INTEGER, // Java type is java.lang.Integer, SQL type is Types.INTEGER
+            ExtDataType.EXT_TINYINT, // Java type is java.lang.Integer, SQL type is Types.TINYINT
+            ExtDataType.EXT_SMALLINT, // Java type is java.lang.Integer, SQL type is Types.SMALLINT
             DataType.BIGINT, // Java type is java.math.BigInteger, SQL type is Types.BIGINT
             DataType.REAL, // Java type is java.lang.Float, SQL type is Types.REAL
             DataType.DOUBLE, // Java type is java.lang.Double, SQL type is Types.DOUBLE
@@ -66,6 +72,11 @@ public abstract class ExtDataType extends DataType {
         ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.DATE, ExtDataType.EXT_DATE);
         ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.TIME, ExtDataType.EXT_TIME);
         ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.TIMESTAMP, ExtDataType.EXT_TIMESTAMP);
+        ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.INTEGER, ExtDataType.EXT_INTEGER);
+        ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.TINYINT, ExtDataType.EXT_TINYINT);
+        ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.SMALLINT, ExtDataType.EXT_SMALLINT);
+        ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.NUMERIC, ExtDataType.EXT_NUMERIC);
+        ExtDataType.REMAP_DATA_TYPE_MAP.put(DataType.DECIMAL, ExtDataType.EXT_DECIMAL);
     }
 
     private static final Map<Class<?>, DataType> JAVA_TYPE_MAP = new HashMap<>();
@@ -73,14 +84,14 @@ public abstract class ExtDataType extends DataType {
     static {
         ExtDataType.JAVA_TYPE_MAP.put(boolean.class, DataType.BOOLEAN);
         ExtDataType.JAVA_TYPE_MAP.put(Boolean.class, DataType.BOOLEAN);
-        ExtDataType.JAVA_TYPE_MAP.put(byte.class, DataType.TINYINT);
-        ExtDataType.JAVA_TYPE_MAP.put(Byte.class, DataType.TINYINT);
+        ExtDataType.JAVA_TYPE_MAP.put(byte.class, ExtDataType.EXT_TINYINT);
+        ExtDataType.JAVA_TYPE_MAP.put(Byte.class, ExtDataType.EXT_TINYINT);
         ExtDataType.JAVA_TYPE_MAP.put(char.class, DataType.CHAR);
         ExtDataType.JAVA_TYPE_MAP.put(Character.class, DataType.CHAR);
-        ExtDataType.JAVA_TYPE_MAP.put(short.class, DataType.SMALLINT);
-        ExtDataType.JAVA_TYPE_MAP.put(Short.class, DataType.SMALLINT);
-        ExtDataType.JAVA_TYPE_MAP.put(int.class, DataType.INTEGER);
-        ExtDataType.JAVA_TYPE_MAP.put(Integer.class, DataType.INTEGER);
+        ExtDataType.JAVA_TYPE_MAP.put(short.class, ExtDataType.EXT_SMALLINT);
+        ExtDataType.JAVA_TYPE_MAP.put(Short.class, ExtDataType.EXT_SMALLINT);
+        ExtDataType.JAVA_TYPE_MAP.put(int.class, ExtDataType.EXT_INTEGER);
+        ExtDataType.JAVA_TYPE_MAP.put(Integer.class, ExtDataType.EXT_INTEGER);
         ExtDataType.JAVA_TYPE_MAP.put(long.class, DataType.BIGINT_AUX_LONG);
         ExtDataType.JAVA_TYPE_MAP.put(Long.class, DataType.BIGINT_AUX_LONG);
 
@@ -90,7 +101,7 @@ public abstract class ExtDataType extends DataType {
         ExtDataType.JAVA_TYPE_MAP.put(Double.class, DataType.DOUBLE);
 
         ExtDataType.JAVA_TYPE_MAP.put(BigInteger.class, DataType.BIGINT);
-        ExtDataType.JAVA_TYPE_MAP.put(BigDecimal.class, DataType.DECIMAL);
+        ExtDataType.JAVA_TYPE_MAP.put(BigDecimal.class, ExtDataType.EXT_DECIMAL);
 
         ExtDataType.JAVA_TYPE_MAP.put(byte[].class, ExtDataType.EXT_BLOB);
         ExtDataType.JAVA_TYPE_MAP.put(Byte[].class, ExtDataType.EXT_BLOB);
@@ -123,8 +134,9 @@ public abstract class ExtDataType extends DataType {
     }
 
     public static DataType forSqlType(int sqlType) {
-        if (ExtDataType.logger.isDebugEnabled())
+        if (ExtDataType.logger.isDebugEnabled()) {
             ExtDataType.logger.debug("forSqlType(sqlType={}) - start", Integer.valueOf(sqlType));
+        }
 
         return Arrays.stream(ExtDataType.TYPES).filter(dataType -> dataType.getSqlType() == sqlType).findFirst()
                 .orElse(DataType.UNKNOWN);

@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
@@ -43,6 +44,7 @@ public class TableAssertion {
     public void assertEquals(String expectedFilePath, Meta meta, String actualTableName) {
         URL url = this.testClass.getResource(expectedFilePath);
         FileType fileType = FileType.valueOf(url);
+        String[] ignoreCols = null;
 
         try {
             IDataSet expectedDataSet;
@@ -50,10 +52,12 @@ public class TableAssertion {
             case EXCEL:
                 ExcelMeta excelMeta = (meta instanceof ExcelMeta) ? ExcelMeta.class.cast(meta) : Meta.excel();
                 expectedDataSet = new ExcelDataSet(url, excelMeta);
+                ignoreCols = excelMeta.ignoreCols().get(actualTableName);
                 break;
             case CSV:
                 CsvMeta csvMeta = (meta instanceof CsvMeta) ? CsvMeta.class.cast(meta) : Meta.csv();
                 expectedDataSet = new CsvDataSet(url, actualTableName, csvMeta);
+                ignoreCols = csvMeta.ignoreCols();
                 break;
             default:
                 throw new IllegalArgumentException("Unknown file type. : " + expectedFilePath);
@@ -63,7 +67,8 @@ public class TableAssertion {
             IDataSet dataSet = this.databaseConnection.createDataSet();
             ITable actualTable = dataSet.getTable(actualTableName);
 
-            Assertion.assertEquals(expectedTable, actualTable);
+            Assertion.assertEqualsIgnoreCols(expectedTable, actualTable,
+                    ObjectUtils.defaultIfNull(ignoreCols, new String[] {}));
         } catch (IOException | DatabaseUnitException | SQLException e) {
             throw new AssertRuntimeException(e);
         }

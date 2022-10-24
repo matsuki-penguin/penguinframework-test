@@ -11,4 +11,11 @@ public @interface TableCsvMeta {
     CsvFormatType format() default CsvFormatType.DEFAULT; // = CsvMeta.DEFAULT_FORMAT
 
     String nullString() default CsvMeta.DEFAULT_NULL_STRING;
+
+    /**
+     * 読み込み対象外とするCSVの列名を指定
+     * 
+     * @return 読み込み対象外とするCSVの列名
+     */
+    String[] ignoreCols() default {};
 }
