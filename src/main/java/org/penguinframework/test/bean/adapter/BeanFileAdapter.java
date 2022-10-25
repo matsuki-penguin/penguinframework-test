@@ -34,6 +34,7 @@ import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITable;
 import org.penguinframework.test.support.BeanType;
+import org.penguinframework.test.support.converter.ByteArrayConverter;
 import org.penguinframework.test.support.converter.CalendarConverter;
 import org.penguinframework.test.support.converter.DateConverter;
 import org.penguinframework.test.support.converter.InstantConverter;
@@ -47,7 +48,7 @@ public abstract class BeanFileAdapter {
             Short.class, Integer.class, Long.class, Float.class, Double.class, String.class, BigInteger.class,
             BigDecimal.class, Class.class, java.util.Date.class, java.sql.Date.class, java.sql.Time.class,
             java.sql.Timestamp.class, Calendar.class, LocalDate.class, LocalTime.class, LocalDateTime.class,
-            Instant.class, File.class, URL.class));
+            Instant.class, File.class, URL.class, byte[].class, Byte[].class));
 
     static {
         ConvertUtils.register(new DateConverter(), java.util.Date.class);
@@ -56,6 +57,8 @@ public abstract class BeanFileAdapter {
         ConvertUtils.register(new LocalTimeConverter(), LocalTime.class);
         ConvertUtils.register(new LocalDateTimeConverter(), LocalDateTime.class);
         ConvertUtils.register(new InstantConverter(), Instant.class);
+        ConvertUtils.register(new ByteArrayConverter(), byte[].class);
+        ConvertUtils.register(new ByteArrayConverter(), Byte[].class);
     }
 
     public abstract Object load(URL url, Type type) throws ReflectiveOperationException, DataSetException, IOException;

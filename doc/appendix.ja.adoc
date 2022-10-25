@@ -26,6 +26,7 @@ CsvFormatType列挙の種類と動作内容は以下の通りです。
 
 * プリミティブ型のboolean
 * プリミティブ型のbyte
+* プリミティブ型のbyteの配列
 * プリミティブ型のchar
 * プリミティブ型のshort
 * プリミティブ型のint
@@ -34,6 +35,7 @@ CsvFormatType列挙の種類と動作内容は以下の通りです。
 * プリミティブ型のdouble
 * java.lang.Boolean
 * java.lang.Byte
+* java.lang.Byteの配列
 * java.lang.Character
 * java.lang.Short
 * java.lang.Integer
