@@ -28,7 +28,8 @@ public class ExcelMeta extends Meta {
     }
 
     public static ExcelMeta of(BeanExcelMeta annotation) {
-        return new ExcelMeta();
+        Map<String, String[]> ignoreCols = Collections.singletonMap(annotation.sheet(), annotation.ignoreCols());
+        return new ExcelMeta().ignoreCols(ignoreCols);
     }
 
     public ExcelMeta remapSheetName(Map<String, String> remapSheetName) {

@@ -36,7 +36,7 @@ public class CsvMeta extends Meta {
 
     public static CsvMeta of(BeanCsvMeta annotation) {
         return new CsvMeta().encoding(annotation.encoding()).format(annotation.format())
-                .nullString(annotation.nullString());
+                .nullString(annotation.nullString()).ignoreCols(annotation.ignoreCols());
     }
 
     public CsvMeta encoding(Charset encoding) {

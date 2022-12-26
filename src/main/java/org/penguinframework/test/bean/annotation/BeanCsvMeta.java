@@ -9,4 +9,11 @@ public @interface BeanCsvMeta {
     CsvFormatType format() default CsvFormatType.DEFAULT; // = CsvMeta.DEFAULT_FORMAT
 
     String nullString() default CsvMeta.DEFAULT_NULL_STRING;
+
+    /**
+     * 読み込み対象外とする列名を指定
+     * 
+     * @return 読み込み対象外とする列名
+     */
+    String[] ignoreCols() default {};
 }
