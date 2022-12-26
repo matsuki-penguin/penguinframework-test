@@ -87,6 +87,29 @@ private Profile profile;
 
 <1> BeanExcelMetaアノテーションのsheet属性に使用するシートのシート名を指定します。
 
+==== 除外列
+
+デフォルトではパラメータファイルのヘッダ行に記載されたBeanのフィールド名が初期化対象となります。 +
+初期化対象から除外するフィールドを定義することができます。
+
+.除外列
+[source, java]
+----
+@BeanValueSource(path = "expected_data.xlsx",
+    excelMeta = @BeanExcelMeta(ignoreCols = "dept_code"))                      <1>
+private ExpectedBean expectedBean1;
+
+@BeanValueSource(path = "expected_data.xlsx",
+    excelMeta = @BeanExcelMeta(ignoreCols = {"area_code", "company_code"}))    <2>
+private ExpectedBean expectedBean2;
+    ・
+    ・
+    ・
+----
+
+<1> BeanExcelMetaアノテーションのignoreCols属性にフィールド名を文字列で指定することで、フィールドが初期化対象から除外されます。 +
+<2> シート内の複数の列名を初期化対象から除外する場合、ignoreCols属性に複数のフィールド名を配列で指定します。
+
 === CSV形式のオプション
 
 CSV形式のオプションは、BeanValueSourceアノテーションのcsvMeta属性にBeanCsvMetaアノテーションを指定し、そのBeanCsvMetaアノテーションの属性で指定します。
@@ -94,11 +117,34 @@ CSV形式のオプションは、BeanValueSourceアノテーションのcsvMeta�
 .CSV形式のオプション
 [source, java]
 ----
-@BeanValueSource(path = "prepare_class_data.xlsx", csvMeta = @BeanCsvMeta(...))    <1>
+@BeanValueSource(path = "prepare_class_data.csv", csvMeta = @BeanCsvMeta(...))    <1>
 private Profile profile;
 ----
 
 <1> csvMeta属性にBeanCsvMetaアノテーションを指定し、BeanCsvMetaアノテーションの属性でCSV形式のオプションを指定します。
+
+==== 除外列
+
+デフォルトではパラメータファイルのヘッダ行に記載されたBeanのフィールド名が初期化対象となります。 +
+初期化対象から除外するフィールドを定義することができます。
+
+.除外列
+[source, java]
+----
+@BeanValueSource(path = "expected_data.csv",
+    csvMeta = @BeanCsvMeta(ignoreCols = "dept_code"))                      <1>
+private ExpectedBean expectedBean1;
+
+@BeanValueSource(path = "expected_data.csv", 
+    csvMeta = @BeanCsvMeta(ignoreCols = {"area_code", "company_code"}))    <2>
+private ExpectedBean expectedBean2;
+    ・
+    ・
+    ・
+----
+
+<1> BeanCsvMetaアノテーションのignoreCols属性にフィールド名を文字列で指定することで、フィールドが初期化対象から除外されます。 +
+<2> シート内の複数の列名を初期化対象から除外する場合、ignoreCols属性に複数のフィールド名を配列で指定します。
 
 ==== 文字コード
 
